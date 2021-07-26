@@ -22,16 +22,16 @@ __meta__ = {
 
 [node name="Open" type="NinePatchRect" parent="."]
 margin_right = 200.0
-margin_bottom = 35.0
-rect_min_size = Vector2( 200, 35 )
+margin_bottom = 40.0
+rect_min_size = Vector2( 200, 40 )
 texture = ExtResource( 1 )
 patch_margin_left = 170
 patch_margin_right = 20
 
 [node name="Content" type="HBoxContainer" parent="."]
-margin_top = 35.0
+margin_top = 40.0
 margin_right = 200.0
-margin_bottom = 59.0
+margin_bottom = 64.0
 custom_constants/separation = 0
 
 [node name="Visual" type="NinePatchRect" parent="Content"]
@@ -55,10 +55,10 @@ __meta__ = {
 }
 
 [node name="Close" type="NinePatchRect" parent="."]
-margin_top = 59.0
+margin_top = 64.0
 margin_right = 200.0
-margin_bottom = 98.0
-rect_min_size = Vector2( 200, 39 )
+margin_bottom = 108.0
+rect_min_size = Vector2( 200, 44 )
 texture = ExtResource( 3 )
 patch_margin_left = 170
 patch_margin_right = 20
@@ -71,7 +71,7 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape2D" parent="ConnectDetect"]
-position = Vector2( 123.25, 51.25 )
+position = Vector2( 123.25, 35.25 )
 z_index = 5
 shape = SubResource( 1 )
 
