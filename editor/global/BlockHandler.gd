@@ -1,5 +1,4 @@
 extends Node
-class_name BlockHandlerClass
 
 #Statement Parts
 const StatementBlock = preload("res://editor/blocks/StatementBlock.tscn")
