@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://editor/blocks/components/Number.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/editor/blocks/components/icons/item_light.png" type="Texture" id=2]
+
+[node name="Item" instance=ExtResource( 1 )]
+margin_right = 184.0
+
+[node name="Visual" parent="." index="0"]
+margin_right = 184.0
+
+[node name="InputContainer" parent="Visual" index="0"]
+margin_right = 171.0
+
+[node name="Icon" parent="Visual/InputContainer" index="0"]
+visible = true
+margin_right = 28.0
+texture = ExtResource( 2 )
+
+[node name="SpinBox" parent="Visual/InputContainer" index="1"]
+margin_left = 28.0
+margin_right = 158.0
+min_value = 1.0
+max_value = 999.0
+step = 1.0
+value = 1.0
+allow_greater = false
+allow_lesser = false

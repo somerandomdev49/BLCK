@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://editor/TestScene.gd" type="Script" id=1]
+[ext_resource path="res://editor/BlockCanvas.gd" type="Script" id=2]
+
+[node name="World" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="BlockCanvas" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="Camera" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 2, 2 )
+smoothing_enabled = true
+smoothing_speed = 21.0

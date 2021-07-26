@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/editor/blocks/statement/open.png" type="Texture" id=1]
+[ext_resource path="res://assets/editor/blocks/statement/content.png" type="Texture" id=2]
+[ext_resource path="res://assets/editor/blocks/statement/close.png" type="Texture" id=3]
+[ext_resource path="res://editor/blocks/statement/Opening.gd" type="Script" id=4]
+[ext_resource path="res://assets/editor/blocks/statement/highlight.png" type="Texture" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 84, 29.25 )
+
+[node name="Opening" type="VBoxContainer" groups=[
+"opening",
+]]
+margin_right = 200.0
+margin_bottom = 98.0
+custom_constants/separation = 0
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Open" type="NinePatchRect" parent="."]
+margin_right = 200.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 200, 35 )
+texture = ExtResource( 1 )
+patch_margin_left = 170
+patch_margin_right = 20
+
+[node name="Content" type="HBoxContainer" parent="."]
+margin_top = 35.0
+margin_right = 200.0
+margin_bottom = 59.0
+custom_constants/separation = 0
+
+[node name="Visual" type="NinePatchRect" parent="Content"]
+margin_right = 40.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 40, 24 )
+texture = ExtResource( 2 )
+
+[node name="Break" type="Control" parent="Content"]
+margin_left = 40.0
+margin_right = 40.0
+margin_bottom = 24.0
+
+[node name="BlockContainer" type="MarginContainer" parent="Content/Break"]
+custom_constants/margin_right = 0
+custom_constants/margin_top = -20
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Close" type="NinePatchRect" parent="."]
+margin_top = 59.0
+margin_right = 200.0
+margin_bottom = 98.0
+rect_min_size = Vector2( 200, 39 )
+texture = ExtResource( 3 )
+patch_margin_left = 170
+patch_margin_right = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConnectDetect" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape2D" parent="ConnectDetect"]
+position = Vector2( 123.25, 51.25 )
+z_index = 5
+shape = SubResource( 1 )
+
+[node name="Highlight" type="Sprite" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+show_behind_parent = true
+position = Vector2( 226, 89 )
+z_index = 10
+texture = ExtResource( 5 )
+
+[node name="Tween" type="Tween" parent="."]

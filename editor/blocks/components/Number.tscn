@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://assets/editor/blocks/block_font.tres" type="DynamicFont" id=1]
+[ext_resource path="res://editor/blocks/components/Number.gd" type="Script" id=2]
+[ext_resource path="res://assets/editor/blocks/components/updown.png" type="Texture" id=3]
+[ext_resource path="res://editor/blocks/components/InputComponent.tscn" type="PackedScene" id=4]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="Theme" id=2]
+default_font = ExtResource( 1 )
+LineEdit/colors/clear_button_color = Color( 0.88, 0.88, 0.88, 1 )
+LineEdit/colors/clear_button_color_pressed = Color( 1, 1, 1, 1 )
+LineEdit/colors/cursor_color = Color( 0.94, 0.94, 0.94, 1 )
+LineEdit/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+LineEdit/colors/font_color_selected = Color( 0, 0, 0, 1 )
+LineEdit/colors/font_color_uneditable = Color( 0.88, 0.88, 0.88, 0.5 )
+LineEdit/colors/selection_color = Color( 0.49, 0.49, 0.49, 1 )
+LineEdit/constants/minimum_spaces = 0
+LineEdit/fonts/font = null
+LineEdit/icons/clear = null
+LineEdit/styles/focus = SubResource( 1 )
+LineEdit/styles/normal = SubResource( 1 )
+LineEdit/styles/read_only = SubResource( 1 )
+
+[node name="Number" instance=ExtResource( 4 )]
+margin_right = 156.0
+margin_bottom = 72.0
+script = ExtResource( 2 )
+
+[node name="Visual" parent="." index="0"]
+margin_right = 156.0
+
+[node name="InputContainer" parent="Visual" index="0"]
+margin_right = 143.0
+
+[node name="SpinBox" type="SpinBox" parent="Visual/InputContainer" index="1"]
+margin_right = 130.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 130, 72 )
+size_flags_horizontal = 3
+theme = SubResource( 2 )
+custom_icons/updown = ExtResource( 3 )
+max_value = 0.0
+step = 0.0
+allow_greater = true
+allow_lesser = true
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
