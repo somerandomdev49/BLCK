@@ -41,9 +41,9 @@ const ColorBlock = preload("res://editor/blocks/numlike/ColorBlock.tscn")
 const BlockBlock = preload("res://editor/blocks/numlike/BlockBlock.tscn")
 const ItemBlock = preload("res://editor/blocks/numlike/ItemBlock.tscn")
 
-const StringBlock = preload("res://editor/blocks/StringBlock.tscn")
+const StringBlock = preload("res://editor/blocks/string/StringBlock.tscn")
 
-const BooleanBlock = preload("res://editor/blocks/BooleanBlock.tscn")
+const BooleanBlock = preload("res://editor/blocks/boolean/BooleanBlock.tscn")
 
 const ObjectBlock = preload("res://editor/blocks/special/ObjectBlock.tscn")
 const DictBlock = preload("res://editor/blocks/special/DictBlock.tscn")

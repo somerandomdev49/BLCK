@@ -7,7 +7,7 @@ var insert_area = null
 
 onready var connect_area = $Parts/Top/ConnectArea
 
-
+var block_ID = ""
 var component_dict = {
 	
 }

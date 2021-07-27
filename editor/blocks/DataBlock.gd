@@ -10,6 +10,7 @@ var data_type = -1
 
 onready var insert_area = $InsertArea
 
+var block_ID = ""
 var component_dict = {
 	
 }
