@@ -18,7 +18,6 @@ config/icon="res://icon.png"
 [autoload]
 
 EditorHandler="*res://editor/global/EditorHandler.gd"
-Blocks="*res://editor/global/Blocks.gd"
 BlockHandler="*res://editor/global/BlockHandler.gd"
 
 [debug]
