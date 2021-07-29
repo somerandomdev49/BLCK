@@ -18,7 +18,7 @@ func highlight(var area):
 	
 	drag_area = area
 	
-	$Visual/Tween.stop_all()
+	$Visual/Tween.stop($Visual,"modulate:a")
 	$Visual/Tween.interpolate_property($Visual,"modulate:a",null,0.5,0.075)
 	$Visual/Tween.start()
 	
@@ -27,7 +27,7 @@ func highlight(var area):
 func unhighlight():
 	drag_area = null
 	
-	$Visual/Tween.stop_all()
+	$Visual/Tween.stop($Visual,"modulate:a")
 	$Visual/Tween.interpolate_property($Visual,"modulate:a",null,1,0.075)
 	$Visual/Tween.start()
 	
