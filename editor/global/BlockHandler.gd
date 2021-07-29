@@ -333,17 +333,21 @@ func buildBlock(var block_ID):
 	
 	var definition = BLOCK_DEFINITIONS_PARSED[block_ID]
 	
+	var new_block = null
+	
 	match definition.block_type:
 		BlockTypes.STATEMENT:
-			return buildStatement(definition.components,definition.block_type,definition.category)
+			new_block = buildStatement(definition.components,definition.block_type,definition.category)
 		BlockTypes.HEADER:
-			return buildStatement(definition.components,definition.block_type,definition.category)
+			new_block = buildStatement(definition.components,definition.block_type,definition.category)
 		BlockTypes.END:
-			return buildStatement(definition.components,definition.block_type,definition.category)
-		BlockTypes.HEADER:
-			return null
+			new_block = buildStatement(definition.components,definition.block_type,definition.category)
 		_:
-			return buildData(definition.components,definition.block_type,definition.category)
+			new_block = buildData(definition.components,definition.block_type,definition.category)
+	
+	new_block.block_ID = block_ID
+	
+	return new_block
 	
 
 func buildData(var components, var block_type, var category):

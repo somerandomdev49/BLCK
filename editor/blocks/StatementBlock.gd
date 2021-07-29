@@ -20,6 +20,11 @@ var drag_pos = Vector2(0,0)
 
 var parent = null
 
+func get_connected_block():
+	if get_child_count() > 1:
+		return get_child(1)
+	else:
+		return null
 
 func connect_to_bottom(var bottom):
 	block_canvas.remove_child(self)

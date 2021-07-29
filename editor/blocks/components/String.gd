@@ -13,3 +13,9 @@ func _ready():
 	$Visual/InputContainer/LineEdit.connect("text_changed",self,"textChanged")
 	
 	pass
+
+
+func empty_convert():
+	
+	return $Visual/InputContainer/LineEdit.text
+	

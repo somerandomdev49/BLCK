@@ -1,16 +1,18 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://editor/blocks/components/Number.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/editor/blocks/components/icons/color.png" type="Texture" id=2]
+[ext_resource path="res://editor/blocks/components/Color.gd" type="Script" id=3]
 
 [node name="Color" instance=ExtResource( 1 )]
 margin_right = 204.0
+script = ExtResource( 3 )
 
 [node name="Visual" parent="." index="0"]
-margin_right = 204.0
+margin_right = 210.0
 
 [node name="InputContainer" parent="Visual" index="0"]
-margin_right = 191.0
+margin_right = 197.0
 
 [node name="Icon" parent="Visual/InputContainer" index="0"]
 visible = true
@@ -18,8 +20,8 @@ margin_right = 48.0
 texture = ExtResource( 2 )
 
 [node name="SpinBox" parent="Visual/InputContainer" index="1"]
-margin_left = 48.0
-margin_right = 178.0
+margin_left = 54.0
+margin_right = 184.0
 min_value = 1.0
 max_value = 999.0
 step = 1.0

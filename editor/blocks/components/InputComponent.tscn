@@ -52,4 +52,4 @@ collision_mask = 0
 position = Vector2( 75, 36 )
 shape = SubResource( 2 )
 
-[node name="Tween" type="Tween" parent="."]
+[node name="Tween" type="Tween" parent="Visual"]

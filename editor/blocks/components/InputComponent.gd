@@ -5,6 +5,12 @@ var data_type = -1
 
 var drag_area = null
 
+func get_connected_block():
+	if get_child_count() > 1:
+		return get_child(1)
+	else:
+		return null
+
 func highlight(var area):
 	
 	if parent_block.block_canvas.highlighted_input != null:
@@ -12,18 +18,18 @@ func highlight(var area):
 	
 	drag_area = area
 	
-	$Tween.stop_all()
-	$Tween.interpolate_property($Visual,"modulate:a",null,0.5,0.075)
-	$Tween.start()
+	$Visual/Tween.stop_all()
+	$Visual/Tween.interpolate_property($Visual,"modulate:a",null,0.5,0.075)
+	$Visual/Tween.start()
 	
 	parent_block.block_canvas.highlighted_input = self
 	
 func unhighlight():
 	drag_area = null
 	
-	$Tween.stop_all()
-	$Tween.interpolate_property($Visual,"modulate:a",null,1,0.075)
-	$Tween.start()
+	$Visual/Tween.stop_all()
+	$Visual/Tween.interpolate_property($Visual,"modulate:a",null,1,0.075)
+	$Visual/Tween.start()
 	
 	parent_block.block_canvas.highlighted_input = null
 	

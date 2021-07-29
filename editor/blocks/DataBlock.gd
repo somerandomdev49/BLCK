@@ -15,6 +15,8 @@ var component_dict = {
 	
 }
 
+var parent_input = null
+
 #this code is piss
 
 func refresh():
@@ -34,9 +36,7 @@ func remove_from_input():
 	block_canvas.add_child(self)
 	parent_input.accept_remove()
 	parent_input = null
-	
 
-var parent_input = null
 
 func start_drag():
 	dragging = true
@@ -57,12 +57,16 @@ func stop_drag():
 func _gui_input(event):
 	
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT:
-			if event.pressed:
-				start_drag()
-			else:
-				stop_drag()
-
+		match event.button_index:
+			BUTTON_LEFT:
+				if event.pressed:
+					start_drag()
+				else:
+					stop_drag()
+			BUTTON_RIGHT:
+				if event.pressed:
+					print( ConversionHandler.convert_block(self) )
+		
 func _ready():
 	set_process(false)
 	get_stylebox("panel").content_margin_bottom = 12

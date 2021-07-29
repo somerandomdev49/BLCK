@@ -7,4 +7,8 @@ func _ready():
 	
 
 
+func empty_convert():
+	
+	return str($Visual/InputContainer/SpinBox.value)
+	
 
