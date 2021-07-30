@@ -5,7 +5,7 @@ onready var InputComponent = get_parent()
 
 func text_changed(_text):
 	InputComponent.rect_size.x = 0
-	#InputComponent.parent_block.refresh()
+	InputComponent.parent_block.refresh()
 	
 
 func _ready():

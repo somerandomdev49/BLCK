@@ -9,6 +9,7 @@ var drag_pos = Vector2(0,0)
 var data_type = -1
 
 onready var insert_area = $InsertArea
+onready var tooltip = $TooltipAnchor/BlockToolTip
 
 var block_ID = ""
 var component_dict = {
@@ -16,6 +17,18 @@ var component_dict = {
 }
 
 var parent_input = null
+
+func build(var type):
+	
+	if BlockHandler.SPECIAL_TYPES.has(type):
+		var type_info = BlockHandler.SPECIAL_TYPES[type]
+		if type_info.icon != null:
+			$HBoxContainer/Icon.texture = type_info.icon
+			$HBoxContainer/Icon.show()
+	
+	$TooltipAnchor/BlockToolTip.set_type(type)
+	data_type = type
+	
 
 #this code is piss
 
@@ -36,6 +49,7 @@ func remove_from_input():
 	block_canvas.add_child(self)
 	parent_input.accept_remove()
 	parent_input = null
+	mouse_exited()
 
 
 func start_drag():
@@ -46,6 +60,7 @@ func start_drag():
 	if parent_input == null:
 		$InsertArea.monitorable = true
 	raise()
+	mouse_exited()
 	
 func stop_drag():
 	dragging = false
@@ -66,13 +81,39 @@ func _gui_input(event):
 			BUTTON_RIGHT:
 				if event.pressed:
 					print( ConversionHandler.convert_block(self) )
-		
+
+
+func mouse_entered():
+	$HoverTimer.start()
+
+func mouse_exited():
+	$HoverTimer.stop()
+	$Tween.stop(tooltip,"modulate:a")
+	$Tween.interpolate_property(tooltip,"modulate:a",null,0,0.25,Tween.TRANS_SINE,Tween.EASE_IN_OUT)
+	$Tween.start()
+	
+func hover_timeout():
+	$HoverTimer.stop()
+	#$Tween.stop(tooltip,"modulate:a")
+	#$Tween.interpolate_property(tooltip,"modulate:a",null,1,0.25,Tween.TRANS_SINE,Tween.EASE_IN_OUT)
+	#$Tween.start()
+	
 func _ready():
+	
+	tooltip.modulate.a = 0
+	
 	set_process(false)
 	get_stylebox("panel").content_margin_bottom = 12
 	get_stylebox("panel").content_margin_top = 12
 	get_stylebox("panel").content_margin_left = 24
 	get_stylebox("panel").content_margin_right = 24
+	
+	connect("mouse_entered",self,"mouse_entered")
+	connect("mouse_exited",self,"mouse_exited")
+	
+	$HoverTimer.connect("timeout",self,"hover_timeout")
+	
+	
 
 
 func _process(_delta):
@@ -89,7 +130,7 @@ func _process(_delta):
 	
 
 
-func addComponent(var component):
+func add_component(var component):
 	
 	var new_component = null
 	
@@ -97,46 +138,14 @@ func addComponent(var component):
 		BlockHandler.Components.TEXT:
 			new_component = BlockHandler.TextComponent.instance()
 			new_component.text = component.text
-		BlockHandler.Components.NUMBER:
-			new_component = BlockHandler.NumberComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.NUMBER
-		BlockHandler.Components.COUNTER:
-			new_component = BlockHandler.CounterComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.COUNTER
-		BlockHandler.Components.GROUP:
-			new_component = BlockHandler.GroupComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.GROUP
-		BlockHandler.Components.COLOR:
-			new_component = BlockHandler.ColorComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.COLOR
-		BlockHandler.Components.BLOCK:
-			new_component = BlockHandler.BlockComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.BLOCK
-		BlockHandler.Components.ITEM:
-			new_component = BlockHandler.ItemComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.ITEM
-		BlockHandler.Components.STRING:
-			new_component = BlockHandler.StringComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.STRING
-		BlockHandler.Components.BOOLEAN:
-			new_component = BlockHandler.BooleanComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.BOOLEAN
-		BlockHandler.Components.OBJECT:
-			new_component = BlockHandler.ObjectComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.OBJECT
-		BlockHandler.Components.DICT:
-			new_component = BlockHandler.DictComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.DICT
-		BlockHandler.Components.ARRAY:
-			new_component = BlockHandler.ArrayComponent.instance()
-			new_component.data_type = BlockHandler.BlockTypes.ARRAY
+		BlockHandler.Components.DATA:
+			new_component = BlockHandler.DataComponent.instance()
+			new_component.build(component.data_types)
 		BlockHandler.Components.LIST:
 			new_component = BlockHandler.ListComponent.instance()
 			new_component.add_items(component.options)
 		BlockHandler.Components.COLOR_PICKER:
 			new_component = BlockHandler.ColorPickerComponent.instance()
-		BlockHandler.Components.UNIVERSAL:
-			new_component = BlockHandler.UniversalComponent.instance()
 	
 	$HBoxContainer/Components.add_child(new_component)
 	return new_component

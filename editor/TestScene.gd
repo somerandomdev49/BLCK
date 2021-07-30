@@ -9,8 +9,8 @@ var prev_camera_pos = Vector2(0,0)
 func _ready():
 	
 	var j = 0
-	for i in BlockHandler.BLOCK_DEFINITIONS_PARSED:
-		var new_block = BlockHandler.buildBlock(i)
+	for i in BlockHandler.BLOCK_DEFINITIONS:
+		var new_block = BlockHandler.build_block(i)
 		new_block.rect_position = Vector2(0,j)
 		j += 150
 		$BlockCanvas.add_child(new_block)
