@@ -5,6 +5,12 @@ var drag_area = null
 
 onready var block_container = $Content/Break/BlockContainer
 
+func get_connected_block():
+	if $Content/Break/BlockContainer.get_child_count() > 0:
+		return $Content/Break/BlockContainer.get_child(0)
+	else:
+		return null
+
 func set_color(var color):
 	
 	$Open.self_modulate = color

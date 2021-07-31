@@ -1,7 +1,10 @@
 extends Node
 
-#Statement Parts
+#Block Types
 const StatementBlock = preload("res://editor/blocks/StatementBlock.tscn")
+const DataBlock = preload("res://editor/blocks/DataBlock.tscn")
+
+#Statement Parts
 
 const StatementBottom = preload("res://editor/blocks/statement/Bottom.tscn")
 const StatementTop = preload("res://editor/blocks/statement/Top.tscn")
@@ -12,438 +15,1261 @@ const StatementEnd = preload("res://editor/blocks/statement/End.tscn")
 
 #Components
 const TextComponent = preload("res://editor/blocks/components/Text.tscn")
-
-const NumberComponent = preload("res://editor/blocks/components/Number.tscn")
-const BooleanComponent = preload("res://editor/blocks/components/Boolean.tscn")
-const StringComponent = preload("res://editor/blocks/components/String.tscn")
-
-const CounterComponent = preload("res://editor/blocks/components/Counter.tscn")
-const GroupComponent = preload("res://editor/blocks/components/Group.tscn")
-const ColorComponent = preload("res://editor/blocks/components/Color.tscn")
-const BlockComponent = preload("res://editor/blocks/components/Block.tscn")
-const ItemComponent = preload("res://editor/blocks/components/Item.tscn")
-
-const ObjectComponent = preload("res://editor/blocks/components/Object.tscn")
-const DictComponent = preload("res://editor/blocks/components/Dictionary.tscn")
-const ArrayComponent = preload("res://editor/blocks/components/Array.tscn")
-
-const ListComponent = preload("res://editor/blocks/components/List.tscn")
-const ColorPickerComponent = preload("res://editor/blocks/components/ColorPicker.tscn")
-const UniversalComponent = preload("res://editor/blocks/components/Universal.tscn")
-
+const DataComponent = preload("res://editor/blocks/components/DataComponent.tscn")
 const OpeningComponent = preload("res://editor/blocks/statement/Opening.tscn")
+const ColorPickerComponent = preload("res://editor/blocks/components/ColorPicker.tscn")
+const ListComponent = preload("res://editor/blocks/components/List.tscn")
 
-#Data Blocks
-const NumberBlock = preload("res://editor/blocks/numlike/NumberBlock.tscn")
-const CounterBlock = preload("res://editor/blocks/numlike/CounterBlock.tscn")
-const GroupBlock = preload("res://editor/blocks/numlike/GroupBlock.tscn")
-const ColorBlock = preload("res://editor/blocks/numlike/ColorBlock.tscn")
-const BlockBlock = preload("res://editor/blocks/numlike/BlockBlock.tscn")
-const ItemBlock = preload("res://editor/blocks/numlike/ItemBlock.tscn")
+#Icons
+const AnyIcon = preload("res://assets/editor/blocks/icons/any.png")
+const ArrayIcon = preload("res://assets/editor/blocks/icons/array.png")
+const BlockIcon = preload("res://assets/editor/blocks/icons/block.png")
+const ColorIcon = preload("res://assets/editor/blocks/icons/color.png")
+const CounterIcon = preload("res://assets/editor/blocks/icons/counter.png")
+const DictIcon = preload("res://assets/editor/blocks/icons/dict.png")
+const GroupIcon = preload("res://assets/editor/blocks/icons/group.png")
+const ItemIcon = preload("res://assets/editor/blocks/icons/item.png")
+const ObjectIcon = preload("res://assets/editor/blocks/icons/object.png")
 
-const StringBlock = preload("res://editor/blocks/string/StringBlock.tscn")
+#InputStyles
+const NumInputStyle = preload("res://assets/editor/blocks/components/input_styles/NumInput.tres")
+const BoolInputStyle = preload("res://assets/editor/blocks/components/input_styles/BoolInput.tres")
+const StringInputStyle = preload("res://assets/editor/blocks/components/input_styles/StringInput.tres")
+const SpecialInputStyle = preload("res://assets/editor/blocks/components/input_styles/SpecialInput.tres")
+const UniversalInputStyle = preload("res://assets/editor/blocks/components/input_styles/UniversalInput.tres")
 
-const BooleanBlock = preload("res://editor/blocks/boolean/BooleanBlock.tscn")
-
-const ObjectBlock = preload("res://editor/blocks/special/ObjectBlock.tscn")
-const DictBlock = preload("res://editor/blocks/special/DictBlock.tscn")
-const ArrayBlock = preload("res://editor/blocks/special/ArrayBlock.tscn")
+#BlockStyles
+const NumBlockStyle = preload("res://assets/editor/blocks/data/styles/NumBlock.tres")
+const BoolBlockStyle = preload("res://assets/editor/blocks/data/styles/BoolBlock.tres")
+const StringBlockStyle = preload("res://assets/editor/blocks/data/styles/StringBlock.tres")
+const SpecialBlockStyle = preload("res://assets/editor/blocks/data/styles/SpecialBlock.tres")
 
 
 enum BlockTypes{
-	
-	HEADER,
 	STATEMENT,
+	HEADER,
 	END,
-	
-	NUMBER,
-	COUNTER,
-	GROUP,
-	COLOR,
-	BLOCK,
-	ITEM,
-	
-	STRING,
-	
-	BOOLEAN,
-	
-	OBJECT,
-	DICT,
-	ARRAY,
-	
-}
-
-const BLOCK_TYPE_NAMES = {
-	
-	"header": BlockTypes.HEADER,
-	"statement": BlockTypes.STATEMENT,
-	"end": BlockTypes.END,
-	"number": BlockTypes.NUMBER,
-	"counter": BlockTypes.COUNTER,
-	"group": BlockTypes.GROUP,
-	"color": BlockTypes.COLOR,
-	"block": BlockTypes.BLOCK,
-	"item": BlockTypes.ITEM,
-	"string": BlockTypes.STRING,
-	"boolean": BlockTypes.BOOLEAN,
-	"object": BlockTypes.OBJECT,
-	"dict": BlockTypes.DICT,
-	"array": BlockTypes.ARRAY,
-	
+	DATA
 }
 
 enum Components{
-	
 	TEXT,
 	OPENING,
-	
-	NUMBER,
-	COUNTER,
-	GROUP,
-	COLOR,
-	BLOCK,
-	ITEM,
-	
-	STRING,
-	
-	BOOLEAN,
-	
-	OBJECT,
-	DICT,
-	ARRAY,
-	
+	DATA,
 	LIST,
 	COLOR_PICKER,
+}
+
+enum SpecialInputs{
+	NUMBER,
+	STRING,
+	BOOLEAN,
+}
+
+const SPECIAL_TYPES = {
+	"@number": {
+		"icon": null,
+		"input": SpecialInputs.NUMBER,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
+	},
+	"@counter": {
+		"icon": CounterIcon,
+		"input": SpecialInputs.NUMBER,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
+	},
+	"@group": {
+		"icon": GroupIcon,
+		"input": SpecialInputs.NUMBER,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
+	},
+	"@color": {
+		"icon": ColorIcon,
+		"input": SpecialInputs.NUMBER,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
+	},
+	"@block": {
+		"icon": BlockIcon,
+		"input": SpecialInputs.NUMBER,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
+	},
+	"@item": {
+		"icon": ItemIcon,
+		"input": SpecialInputs.NUMBER,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
+	},
+	"@string": {
+		"icon": null,
+		"input": SpecialInputs.STRING,
+		"input_style": StringInputStyle,
+		"block_style": StringBlockStyle,
+	},
+	"@boolean": {
+		"icon": null,
+		"input": SpecialInputs.BOOLEAN,
+		"input_style": BoolInputStyle,
+		"block_style": BoolBlockStyle,
+	},
+	"@object": {
+		"icon": ObjectIcon,
+		"input": null,
+		"input_style": SpecialInputStyle,
+		"block_style": SpecialBlockStyle,
+	},
+	"@dict": {
+		"icon": DictIcon,
+		"input": null,
+		"input_style": SpecialInputStyle,
+		"block_style": SpecialBlockStyle,
+	},
+	"@array": {
+		"icon": ArrayIcon,
+		"input": null,
+		"input_style": SpecialInputStyle,
+		"block_style": SpecialBlockStyle,
+	},
+}
+
+const ICON_TYPES = [
+	"array",
+	"block",
+	"color",
+	"counter",
+	"dict",
+	"group",
+	"item",
+	"object"
+]
+
+func text(var text):
+	return {"type": Components.TEXT, "text": text}
 	
-	UNIVERSAL,
+func opening(var comp_name):
+	return {"type": Components.OPENING, "name": comp_name}
+
+func data(var data_types, var comp_name):
+	return {"type": Components.DATA, "data_types": data_types, "name": comp_name}
+
+func list(var options, var comp_name):
+	return {"type":  Components.LIST, "options": options, "name": comp_name}
+
+func picker(var alpha_allowed, var comp_name):
+	return {"type":  Components.COLOR_PICKER, "alpha": alpha_allowed, "name": comp_name}
+
+var BLOCK_DEFINITIONS = {
+
+	####Control
+	#--------------------------------
+	"IF": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.CONTROL,
+		"components": [
+			text("if"),
+			data(["@boolean"],"condition"),
+			opening("true"),
+		]
+	},
+	"IF_ELSE": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.CONTROL,
+		"components": [
+			text("if"),
+			data(["@boolean"],"condition"),
+			opening("true"),
+			text("else"),
+			opening("false"),
+		]
+	},
+	"REPEAT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.CONTROL,
+		"components": [
+			text("repeat"),
+			data(["@number"],"amount"),
+			opening("blocks"),
+		]
+	},
+
+	####Group
+	#--------------------------------
+
+	"MOVE_INSTANT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("move"), data(["@group"],"group"),
+			text("x:"), data(["@number"],"x"),
+			text("y:"), data(["@number"],"y"),
+		]
+	},
+	"MOVE_DURATION": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("move"), data(["@group"],"group"),
+			text("x:"), data(["@number"],"x"),
+			text("y:"), data(["@number"],"y"),
+			text("over"), data(["@number"],"time"), text("seconds")
+		]
+	},
+	"MOVE_FULL": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("move"), data(["@group"],"group"),
+			text("x:"), data(["@number"],"x"),
+			text("y:"), data(["@number"],"y"),
+			text("over"), data(["@number"],"time"),
+			text("seconds, easing:"),
+			list([
+				"Ease In Out",
+				"Ease In",
+				"Ease Out",
+				"Elastic In Out",
+				"Elastic In",
+				"Elastic Out",
+				"Bounce In Out",
+				"Bounce In",
+				"Bounce Out",
+				"Exponential In Out",
+				"Exponential In",
+				"Exponential Out",
+				"Sine In Out",
+				"Sine In",
+				"Sine Out",
+				"Back In Out",
+				"Back In",
+				"Back Out",
+			], "easing"),
+			text("rate:"), data(["@number"],"rate"),
+		]
+	},
+	"ALPHA": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("set alpha of"),
+			data(["@group"],"group"),
+			text("to"), data(["@number"],"amount"), text("%")
+		]
+	},
+	"ALPHA_DURATION": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("set alpha of"),
+			data(["@group"],"group"),
+			text("to"), data(["@number"],"amount"), text("%"),
+			text("over"), data(["@number"],"time"), text("seconds")
+		]
+	},
+	"FOLLOW": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("make"), data(["@group"],"group1"),
+			text("follow"), data(["@group"],"group2"),
+			text("for"), data(["@number"],"time"), text("seconds")
+		]
+	},
+	"FOLLOW_FULL": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("make"), data(["@group"],"group1"),
+			text("follow"), data(["@group"],"group2"),
+			text("for"), data(["@number"],"time"), text("seconds"),
+			text("x mod:"), data(["@number"],"x_mod"),
+			text("y mod:"), data(["@number"],"y_mod"),
+		]
+	},
+	"FOLLOW_Y": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("make"), data(["@group"],"group"),
+			text("follow the player's Y for"),
+			data(["@number"],"time"), text("seconds")
+		]
+	},
+	"FOLLOW_Y_FULL": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("make"), data(["@group"],"group"),
+			text("follow the player's Y for"),
+			data(["@number"],"time"), text("seconds, delay:"),
+			data(["@number"],"delay"),
+			text("offset:"), data(["@number"],"offset"),
+			text("max speed:"), data(["@number"],"max_speed"),
+		]
+	},
+	"LOCK_TO_PLAYER_X": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("lock"), data(["@group"],"group"),
+			text("to the player's X for"),
+			data(["@number"],"time"), text("seconds"),
+		]
+	},
+	"LOCK_TO_PLAYER_Y": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("lock"), data(["@group"],"group"),
+			text("to the player's Y for"),
+			data(["@number"],"time"), text("seconds"),
+		]
+	},
+	"LOCK_TO_PLAYER": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("lock"), data(["@group"],"group"),
+			text("to the player for"),
+			data(["@number"],"time"), text("seconds"),
+		]
+	},
+	"MOVE_TO_INSTANT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("move"), data(["@group"],"group1"),
+			text("to"), data(["@group"],"group2"),
+		]
+	},
+	"MOVE_TO_DURATION": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("move"), data(["@group"],"group1"),
+			text("to"), data(["@group"],"group2"),
+			text("over"), data(["@number"],"time"), text("seconds")
+		]
+	},
+	"MOVE_TO_FULL": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("move"), data(["@group"],"group1"),
+			text("to"), data(["@group"],"group2"),
+			text("over"), data(["@number"],"time"),
+			text("seconds, easing:"),
+			list([
+				"Ease In Out",
+				"Ease In",
+				"Ease Out",
+				"Elastic In Out",
+				"Elastic In",
+				"Elastic Out",
+				"Bounce In Out",
+				"Bounce In",
+				"Bounce Out",
+				"Exponential In Out",
+				"Exponential In",
+				"Exponential Out",
+				"Sine In Out",
+				"Sine In",
+				"Sine Out",
+				"Back In Out",
+				"Back In",
+				"Back Out",
+			], "easing"),
+			text("rate:"), data(["@number"],"rate"),
+		]
+	},
+	"ROTATE_INSTANT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("rotate"), data(["@group"],"group1"),
+			data(["@number"],"degrees"), text("degrees around"),
+			data(["@group"],"group2"),
+			text("lock rotation?"), data(["@boolean"],"lock"),
+		]
+	},
+	"ROTATE_DURATION": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("rotate"), data(["@group"],"group1"),
+			data(["@number"],"degrees"), text("degrees around"),
+			data(["@group"],"group2"),
+			text("over"), data(["@number"],"time"),
+			text("seconds, lock rotation?"), data(["@boolean"],"lock"),
+		]
+	},
+	"ROTATE_FULL": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("rotate"), data(["@group"],"group1"),
+			data(["@number"],"degrees"), text("degrees around"),
+			data(["@group"],"group2"),
+			text("over"), data(["@number"],"time"),
+			text("seconds, easing:"),
+			list([
+				"Ease In Out",
+				"Ease In",
+				"Ease Out",
+				"Elastic In Out",
+				"Elastic In",
+				"Elastic Out",
+				"Bounce In Out",
+				"Bounce In",
+				"Bounce Out",
+				"Exponential In Out",
+				"Exponential In",
+				"Exponential Out",
+				"Sine In Out",
+				"Sine In",
+				"Sine Out",
+				"Back In Out",
+				"Back In",
+				"Back Out",
+			], "easing"),
+			text("rate:"), data(["@number"],"rate"),
+			text("lock rotation?"), data(["@boolean"],"lock"),
+		]
+	},
+	"TOGGLE_OFF": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("toggle"), data(["@group"],"group"), text("off"),
+		]
+	},
+	"TOGGLE_ON": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("toggle"), data(["@group"],"group"), text("on"),
+		]
+	},
+	"PULSE_GROUP": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("pulse"), data(["@group"],"group"), picker(false,"color"),
+			text("fade in:"), data(["@number"],"fade_in"),
+			text("hold:"), data(["@number"],"hold"),
+			text("fade out:"), data(["@number"],"fade_out"),
+			text("exclusive?"), data(["@boolean"],"exclusive"),
+		]
+	},
+	"PULSE_GROUP_RGB": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("pulse"), data(["@group"],"group"),
+			text("r:"), data(["@number"],"r"),
+			text("g:"), data(["@number"],"g"),
+			text("b:"), data(["@number"],"b"),
+			text("fade in:"), data(["@number"],"fade_in"),
+			text("hold:"), data(["@number"],"hold"),
+			text("fade out:"), data(["@number"],"fade_out"),
+			text("exclusive?"), data(["@boolean"],"exclusive"),
+		]
+	},
+	"PULSE_GROUP_HSV": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.GROUPS,
+		"components": [
+			text("pulse"), data(["@group"],"group"),
+			text("h:"), data(["@number"],"h"),
+			text("s:"), data(["@number"],"s"), data(["@boolean"],"s_checked"),
+			text("v:"), data(["@number"],"v"), data(["@boolean"],"v_checked"),
+			text("fade in:"), data(["@number"],"fade_in"),
+			text("hold:"), data(["@number"],"hold"),
+			text("fade out:"), data(["@number"],"fade_out"),
+			text("exclusive?"), data(["@boolean"],"exclusive"),
+		]
+	},
+
+	####Colors
+	#--------------------------------
+	
+	"PULSE_COLOR": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COLORS,
+		"components": [
+			text("pulse"), data(["@color"],"channel"), picker(false,"color"),
+			text("fade in:"), data(["@number"],"fade_in"),
+			text("hold:"), data(["@number"],"hold"),
+			text("fade out:"), data(["@number"],"fade_out"),
+			text("exclusive?"), data(["@boolean"],"exclusive"),
+		]
+	},
+	"PULSE_COLOR_RGB": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COLORS,
+		"components": [
+			text("pulse"), data(["@color"],"channel"),
+			text("r:"), data(["@number"],"r"),
+			text("g:"), data(["@number"],"g"),
+			text("b:"), data(["@number"],"b"),
+			text("fade in:"), data(["@number"],"fade_in"),
+			text("hold:"), data(["@number"],"hold"),
+			text("fade out:"), data(["@number"],"fade_out"),
+			text("exclusive?"), data(["@boolean"],"exclusive"),
+		]
+	},
+	"PULSE_COLOR_HSV": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COLORS,
+		"components": [
+			text("pulse"), data(["@color"],"channel"),
+			text("h:"), data(["@number"],"h"),
+			text("s:"), data(["@number"],"s"), data(["@boolean"],"s_checked"),
+			text("v:"), data(["@number"],"v"), data(["@boolean"],"v_checked"),
+			text("fade in:"), data(["@number"],"fade_in"),
+			text("hold:"), data(["@number"],"hold"),
+			text("fade out:"), data(["@number"],"fade_out"),
+			text("exclusive?"), data(["@boolean"],"exclusive"),
+		]
+	},
+	"SET_COLOR": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COLORS,
+		"components": [
+			text("set"), data(["@color"],"channel"),
+			text("to"), picker(false,"color"),
+			text("over"), data(["@number"],"time"),
+			text("seconds, blending?"), data(["@boolean"],"blending"),
+		]
+	},
+	"SET_COLOR_RGBA": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COLORS,
+		"components": [
+			text("set"), data(["@color"],"channel"),
+			text("r:"), data(["@number"],"r"),
+			text("g:"), data(["@number"],"g"),
+			text("b:"), data(["@number"],"b"),
+			text("a:"), data(["@number"],"opacity"),
+			text("over"), data(["@number"],"time"),
+			text("seconds, blending?"), data(["@boolean"],"blending"),
+		]
+	},
+	####Blocks
+	#--------------------------------
+	"TRACKER_COUNTER": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@counter",
+		"category": EditorHandler.Categories.BLOCKS,
+		"components": [
+			text("tracker counter for"),
+			data(["@block"],"block1"),
+			text("and"), data(["@block"],"block2"),
+		]
+	},
+	
+	####Counters
+	#--------------------------------
+	"COUNTER_ADD": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			text("add"), data(["@number"], "value"),
+			text("to"), data(["@counter"], "counter"),
+		]
+	},
+	"COUNTER_SUBTRACT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			text("subtract"), data(["@number"], "value"),
+			text("from"), data(["@counter"], "counter"),
+		]
+	},
+	"COUNTER_MULTIPLY": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			text("multiply"), data(["@counter"], "counter"),
+			text("by"), data(["@number"], "value"),
+		]
+	},
+	"COUNTER_DIVIDE": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			text("divide"), data(["@counter"], "counter"),
+			text("by"), data(["@number"], "value"),
+		]
+	},
+	"COUNTER_ASSIGN": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			text("set"), data(["@counter"], "counter"),
+			text("to"), data(["@number"], "value"),
+		]
+	},
+
+	####Strings
+	#--------------------------------
+	"STRING_JOIN": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@string",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("join"), data(["@string"], "string1"),
+			data(["@string"], "string2"),
+		]
+	},
+	"STRING_CHAR": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@string",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("character"), data(["@number"], "i"),
+			text("of"), data(["@string"], "string"),
+		]
+	},
+	"STRING_LENGTH": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("length of"), data(["@string"], "string"),
+		]
+	},
+	"STRING_CONTAINS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			data(["@string"], "string1"),
+			text("contains"),
+			data(["@string"], "string2"),
+		]
+	},
+	"STRING_STARTS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			data(["@string"], "string1"),
+			text("starts with"),
+			data(["@string"], "string2"),
+		]
+	},
+	"STRING_ENDS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			data(["@string"], "string1"),
+			text("ends with"),
+			data(["@string"], "string2"),
+		]
+	},
+	"STRING_INDEX": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("position of"),
+			data(["@string"], "string1"),
+			text("in"),
+			data(["@string"], "string2"),
+		]
+	},
+	"STRING_IS_EMPTY": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("is"),
+			data(["@string"], "string"),
+			text("empty"),
+		]
+	},
+	"STRING_IS_LOWERCASE": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("is"),
+			data(["@string"], "string"),
+			text("lowercase"),
+		]
+	},
+	"STRING_IS_UPPERCASE": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("is"),
+			data(["@string"], "string"),
+			text("uppercase"),
+		]
+	},
+	"STRING_LOWERCASE": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@string",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("make"), data(["@string"], "string"),
+			text("lowercase"),
+		]
+	},
+	"STRING_UPPERCASE": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@string",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("make"), data(["@string"], "string"),
+			text("uppercase"),
+		]
+	},
+	"STRING_INTERLACE": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@string",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("interlace"), data(["@string"], "string"),
+			text("in"), data(["@array"], "array"),
+		]
+	},
+	"STRING_SPLIT": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@array",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("split"), data(["@string"], "string"),
+			text("with"), data(["@string"], "separator"),
+		]
+	},
+	"STRING_REVERSE": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@string",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("reverse"), data(["@string"], "string"),
+		]
+	},
+	"SUBSTRING": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@string",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			text("part of"), data(["@string"], "string"),
+			text("from"), data(["@number"], "a"),
+			text("to"), data(["@number"], "b"),
+		]
+	},
+
+	####Arrays
+	#--------------------------------
+	"CLEAR_ARRAY": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("clear"), data(["@array"], "array"),
+		]
+	},
+	"ARRAY_CONTAINS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			data(["@array"], "array"),
+			text("contains"),
+			data([], "element"),
+		]
+	},
+	"ARRAY_INDEX": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("position of"),
+			data([], "element"),
+			text("in"),
+			data(["@array"], "array"),
+		]
+	},
+	"ARRAY_EMPTY": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("is"),
+			data(["@array"], "array"),
+			text("empty"),
+		]
+	},
+	"ARRAY_MAX": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("max number in"),
+			data(["@array"], "array"),
+		]
+	},
+	"ARRAY_MIN": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("min number in"),
+			data(["@array"], "array"),
+		]
+	},
+	"ARRAY_POP": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("remove last element from"),
+			data(["@array"], "array"),
+		]
+	},
+	"ARRAY_PUSH": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("add"), data([], "element"),
+			text("to"), data(["@array"], "array"),
+		]
+	},
+	"ARRAY_REVERSE": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("reverse"), data(["@array"], "array"),
+		]
+	},
+	"ARRAY_SORTED": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@array",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			data(["@array"], "array"), text("sorted"),
+		]
+	},
+	"ARRAY_SHIFT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("remove first element from"),
+			data(["@array"], "array"),
+		]
+	},
+	"ARRAY_REMOVE": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("remove element at position"), data(["@number"],"pos"),
+			text("from"), data(["@array"], "array"),
+		]
+	},
+	"ARRAY_UNSHIFT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("add"), data([], "element"),
+			text("to the start of"), data(["@array"], "array"),
+		]
+	},
+	"ARRAY_SUM": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("sum of numbers in"),
+			data(["@array"], "array"),
+		]
+	},
+	"RANGE": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@array",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("range from"), data(["@number"],"start"),
+			text("to"), data(["@number"],"end"),
+		]
+	},
+	"RANGE_STEP": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@array",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			text("range from"), data(["@number"],"start"),
+			text("to"), data(["@number"],"end"),
+			text("with step"), data(["@number"],"step"),
+		]
+	},
+	"TYPE_RANGE": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@array",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			list(["group","color","block","item"],"type"),
+			text("range from"), data(["@number"],"start"),
+			text("to"), data(["@number"],"end"),
+		]
+	},
+	"TYPE_RANGE_STEP": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@array",
+		"category": EditorHandler.Categories.ARRAYS,
+		"components": [
+			list(["group","color","block","item"],"type"),
+			text("range from"), data(["@number"],"start"),
+			text("to"), data(["@number"],"end"),
+			text("with step"), data(["@number"],"step"),
+		]
+	},
+
+
+	####Operators
+	#--------------------------------
+	"PLUS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("+"),
+			data(["@number"], "b"),
+		]
+	},
+	"MINUS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("-"),
+			data(["@number"], "b"),
+		]
+	},
+	"MULT": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("*"),
+			data(["@number"], "b"),
+		]
+	},
+	"DIV": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("/"),
+			data(["@number"], "b"),
+		]
+	},
+	"MOD": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("%"),
+			data(["@number"], "b"),
+		]
+	},
+	"POW": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("^"),
+			data(["@number"], "b"),
+		]
+	},
+	"ABS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			text("abs"),
+			data(["@number"], "x"),
+		]
+	},
+	"TRIG": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			list(["sin","cos","tan","asin","acos","atan"],"function"),
+			data(["@number"], "x"),
+		]
+	},
+	"ROUND": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			list(["round","floor","ceil"],"function"),
+			data(["@number"], "x"),
+		]
+	},
+	"EULER": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			list(["e^","ln"],"function"),
+			data(["@number"], "x"),
+		]
+	},
+	"SQRT": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			text("sqrt"),
+			data(["@number"], "x"),
+		]
+	},
+
+	"NOT": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			text("not"),
+			data(["@boolean"], "a"),
+		]
+	},
+	"AND": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@boolean"], "a"),
+			text("and"),
+			data(["@boolean"], "b"),
+		]
+	},
+	"OR": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@boolean"], "a"),
+			text("or"),
+			data(["@boolean"], "b"),
+		]
+	},
+	"XOR": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@boolean"], "a"),
+			text("xor"),
+			data(["@boolean"], "b"),
+		]
+	},
+
+	"EQUALS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("="),
+			data(["@number"], "b"),
+		]
+	},
+	"GREATER": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text(">"),
+			data(["@number"], "b"),
+		]
+	},
+	"LESSER": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("<"),
+			data(["@number"], "b"),
+		]
+	},
+	"GREATER_EQ": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("≥"),
+			data(["@number"], "b"),
+		]
+	},
+	"LESSER_EQ": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("≤"),
+			data(["@number"], "b"),
+		]
+	},
 	
 }
 
-const COMPONENT_NAMES = {
-	#Components.TEXT: 
-	"open": Components.OPENING,
-	
-	"n": Components.NUMBER,
-	"#":  Components.COUNTER,
-	"g": Components.GROUP,
-	"c": Components.COLOR,
-	"b": Components.BLOCK,
-	"i": Components.ITEM,
-	
-	"str": Components.STRING,
-	
-	"bool": Components.BOOLEAN,
-	
-	"obj": Components.OBJECT,
-	"dict": Components.DICT,
-	"arr": Components.ARRAY,
-	
-	"list": Components.LIST,
-	"pick": Components.COLOR_PICKER,
-	"any": Components.UNIVERSAL,
-}
 
-func parseDef(var def):
-	
-	
-	var block_type = ""
-	var category = ""
-	
-	var components = []
-	
-	var i = 0
-	
-	while def[i] != '|':
-		block_type += def[i]
-		i += 1
-	block_type = BLOCK_TYPE_NAMES[block_type]
-	i += 1
-	while def[i] != '|':
-		category += def[i]
-		i += 1
-	category = EditorHandler.CATEGORY_NAMES[category]
-	i += 1
-	
-	var new_text = ""
-	
-	while i < def.length():
-		if def[i] == '%':
-			
-			if new_text.strip_edges() != "":
-				components.append({"type": Components.TEXT, "text": new_text.strip_edges()})
-				new_text = ""
-				
-			i += 1
-			var component = ""
-			var component_name = ""
-			while def[i] != '(':
-				component += def[i]
-				i += 1
-			component = COMPONENT_NAMES[component]
-			i += 1
-			while def[i] != ')':
-				component_name += def[i]
-				i += 1
-			i += 1
-			if component == Components.LIST:
-				i += 1
-				var options = []
-				var option_name = ""
-				while def[i] != ']':
-					if def[i] != ',':
-						option_name += def[i]
-					else:
-						options.append(option_name.strip_edges())
-						option_name = ""
-					i += 1
-				options.append(option_name.strip_edges())
-				i += 1
-				components.append({"type": component, "name": component_name, "options": options})
-			else:
-				components.append({"type": component, "name": component_name})
-		else:
-			
-			if def[i] == '`':
-				i += 1
-				new_text += def[i]
-				i += 1
-			else:
-				new_text += def[i]
-				i += 1
-	
-	if new_text.strip_edges() != "":
-		components.append({"type": Components.TEXT, "text": new_text.strip_edges()})
-		new_text = ""
-	
-	return {
-		"block_type": block_type,
-		"category": category,
-		"components": components
-	}
-	
-func _ready():
-	
-	for i in BLOCK_DEFINITIONS:
-		BLOCK_DEFINITIONS_PARSED[i] = parseDef(BLOCK_DEFINITIONS[i])
-	
-	
 
-const BLOCK_DEFINITIONS = {
-   "IF": "statement|control|if %bool(condition) %open(true)",
-   "IF_ELSE": "statement|control|if %bool(condition) %open(true) else %open(false)",
-   "FOR_IN": "statement|control|if %bool(condition) %open(true) else %open(false)",
-   "WHILE": "statement|control|while %bool(condition) %open(blocks)",
-   "REPEAT": "statement|control|repeat %n(amount) times %open(blocks)",
-   "MOVE_INSTANT": "statement|groups|move %g(group) x: %n(x) y: %n(y)",
-   "MOVE_DURATION": "statement|groups|move %g(group) x: %n(x) y: %n(y) over %n(time) seconds",
-   "MOVE_FULL": "statement|groups|move %g(group) x: %n(x) y: %n(y) over %n(time) seconds, easing: %list(easing)[Ease In Out, Ease In, Ease Out, Elastic In Out, Elastic In, Elastic Out, Bounce In Out, Bounce In, Bounce Out, Exponential In Out, Exponential In, Exponential Out, Sine In Out, Sine In, Sine Out, Back In Out, Back In, Back Out] rate: %n(rate)",
-   "ALPHA": "statement|groups|set alpha of %g(group) to %n(amount) `%",
-   "FOLLOW": "statement|groups|make %g(group1) follow %g(group2) for %n(time) seconds",
-   "FOLLOW_FULL": "statement|groups|make %g(group1) follow %g(group2) for %n(time) seconds, x mod: %n(x_mod) y mod: %n(y_mod)",
-   "FOLLOW_Y": "statement|groups|make %g(group1) follow the player's Y for %n(time) seconds",
-   "FOLLOW_Y_DELAY": "statement|groups|make %g(group1) follow the player's Y for %n(time) seconds with a %n(delay) second delay, offset: %n(offset) max speed: %n(max_speed)",
-   "LOCK_TO_PLAYER_X": "statement|groups|lock %g(group1) to the player's X for %n(time) seconds",
-   "LOCK_TO_PLAYER_Y": "statement|groups|lock %g(group1) to the player's Y for %n(time) seconds",
-   "LOCK_TO_PLAYER": "statement|groups|lock %g(group1) to the player for %n(time) seconds",
-   "MOVE_TO_INSTANT": "statement|groups|move %g(group1) to %g(group2)",
-   "MOVE_TO_DURATION": "statement|groups|move %g(group1) to %g(group2) over %n(time) seconds",
-   "MOVE_TO_FULL": "statement|groups|move %g(group1) to %g(group2) over %n(time) seconds, easing: %list(easing)[Ease In Out, Ease In, Ease Out, Elastic In Out, Elastic In, Elastic Out, Bounce In Out, Bounce In, Bounce Out, Exponential In Out, Exponential In, Exponential Out, Sine In Out, Sine In, Sine Out, Back In Out, Back In, Back Out] rate: %n(rate)",
-   "ROTATE_INSTANT": "statement|groups|rotate %g(group1) %n(degrees) degrees around %g(group2) (lock rotation? %bool(lock))",
-   "ROTATE_DURATION": "statement|groups|rotate %g(group1) %n(degrees) degrees around %g(group2) over %n(time) seconds (lock rotation? %bool(lock))",
-   "ROTATE_FULL": "statement|groups|rotate %g(group1) %n(degrees) degrees around %g(group2) over %n(time) seconds, easing: %list(easing)[Ease In Out, Ease In, Ease Out, Elastic In Out, Elastic In, Elastic Out, Bounce In Out, Bounce In, Bounce Out, Exponential In Out, Exponential In, Exponential Out, Sine In Out, Sine In, Sine Out, Back In Out, Back In, Back Out] rate: %n(rate) (lock rotation? %bool(lock))",
-   "TOGGLE_OFF": "statement|groups|toggle %g(group) off",
-   "TOGGLE_ON": "statement|groups|toggle %g(group) on",
-   "PULSE_GROUP": "statement|groups|pulse %g(group) %pick(color) fade in: %n(fade_in) hold: %n(hold) fade out: %n(fade_out) exclusive? %bool(exclusive)",
-   "PULSE_GROUP_RGB": "statement|groups|pulse %g(group) r: %n(r) g: %n(g) b: %n(b) fade in: %n(fade_in) hold: %n(hold) fade out: %n(fade_out) exclusive? %bool(exclusive)",
-   "PULSE_GROUP_HSV": "statement|groups|pulse %g(group) h: %n(r) s: %n(g) %bool(s_checked) v: %n(b) %bool(v_checked) fade in: %n(fade_in) hold: %n(hold) fade out: %n(fade_out) exclusive? %bool(exclusive)",
-   "PULSE_COLOR": "statement|colors|pulse %c(channel) %pick(color) fade in: %n(fade_in) hold: %n(hold) fade out: %n(fade_out) exclusive? %bool(exclusive)",
-   "PULSE_COLOR_RGB": "statement|colors|pulse %c(channel) r: %n(r) g: %n(g) b: %n(b) fade in: %n(fade_in) hold: %n(hold) fade out: %n(fade_out) exclusive? %bool(exclusive)",
-   "PULSE_COLOR_HSV": "statement|colors|pulse %c(channel) h: %n(r) s: %n(g) %bool(s_checked) v: %n(b) %bool(v_checked) fade in: %n(fade_in) hold: %n(hold) fade out: %n(fade_out) exclusive? %bool(exclusive)",
-   "SET_COLOR": "statement|colors|set %c(channel) to %pick(color) over %n(time) seconds, blending? %bool(blending)",
-   "SET_COLOR_RGBA": "statement|colors|set %c(channel) to r: %n(r) g: %n(g) b: %n(b) a: %n(opacity) over %n(time) seconds, blending? %bool(blending)",
-   "TRACKER_COUNTER": "counter|blocks|tracker counter for %b(a) and %b(b)",
-   "ADD": "statement|counters|add %n(value) to %#(counter)",
-   "SUBTRACT": "statement|counters|subtract %n(value) from %#(counter)",
-   "MULTIPLY": "statement|counters|multiply %#(counter) by %n(value)",
-   "DIVIDE": "statement|counters|divide %#(counter) by %n(value)",
-   "ASSIGN": "statement|counters|set %#(counter) to %n(value)",
-   "JOIN": "string|strings|join %str(a) %str(b)",
-   "LETTER": "string|strings|letter %n(i) of %str(text)",
-   "LENGTH": "string|strings|length of %str(text)",
-   "STRING_CONTAINS": "boolean|strings|%str(text1) contains %str(text2)",
-   "STRING_STARTS": "boolean|strings|%str(text1) starts with %str(text2)",
-   "STRING_ENDS": "boolean|strings|%str(text1) ends with %str(text2)",
-   "STRING_INDEX": "number|strings|position of %str(text2) in %str(text2)",
-   "STRING_IS_EMPTY": "boolean|strings|is %str(text) empty",
-   "STRING_IS_LOWERCASE": "boolean|strings|is %str(text) lowercase",
-   "STRING_IS_UPPERCASE": "boolean|strings|is %str(text) uppercase",
-   "STRING_INTERLACE": "string|strings|interlace %str(text) in %arr(array)",
-   "STRING_LOWERCASE": "string|strings|make %str(text) lowercase",
-   "STRING_UPPERCASE": "string|strings|make %str(text) uppercase",
-   "STRING_REVERSE": "string|strings|reverse %str(text)",
-   "STRING_SPLIT": "array|strings|split %str(text) with %str(separator)",
-   "SUBSTRING": "string|strings|part of %str(text) from %n(a) to %n(b)",
-   "CLEAR_ARRAY": "statement|arrays|clear %arr(array)",
-   "ARRAY_CONTAINS": "boolean|arrays|%arr(array) contains %any(el)",
-   "ARRAY_INDEX": "number|arrays|position of %any(el) in %arr(array)",
-   "ARRAY_EMPTY": "boolean|arrays|is %arr(array) empty",
-   "ARRAY_MAX": "number|arrays|max number in %arr(array)",
-   "ARRAY_MIN": "number|arrays|min number in %arr(array)",
-   "ARRAY_POP": "statement|arrays|remove last element from %arr(array)",
-   "ARRAY_SHIFT": "statement|arrays|remove first element from %arr(array)",
-   "ARRAY_REMOVE": "statement|arrays|remove element at position %n(pos) from %arr(array)",
-   "ARRAY_PUSH": "statement|arrays|add %any(el) to %arr(array)",
-   "ARRAY_REVERSE": "statement|arrays|reverse %arr(array)",
-   "ARRAY_SORT": "array|arrays|sort %arr(array)",
-   "ARRAY_SUM": "number|arrays|sum of numbers in %arr(array)",
-   "ARRAY_UNSHIFT": "statement|arrays|add %any(el) to the start of %arr(array)",
-   "RANGE": "array|arrays|range from %n(start) to %n(end)",
-   "RANGE_STEP": "array|arrays|range from %n(start) to %n(end) with step %n(step)",
-   "TYPE_RANGE": "array|arrays|%list(type)[group,color,block,item] range from %n(start) to %n(end)",
-   "TYPE_RANGE_STEP": "array|arrays|%list(type)[group,color,block,item] range from %n(start) to %n(end) with step %n(step)",
-   "OBJECT_ADD": "statement|objects|add %obj(object) to level",
-   "OBJECT_SET": "statement|objects|set key %str(key) of %obj(object) to %any(value)",
-   "PLUS": "number|operators|%n(a) + %n(b)",
-   "MINUS": "number|operators|%n(a) - %n(b)",
-   "MULT": "number|operators|%n(a) * %n(b)",
-   "DIV": "number|operators|%n(a) / %n(b)",
-   "MOD": "number|operators|%n(a) `% %n(b)",
-   "POW": "number|operators|%n(a) ^ %n(b)",
-   "ABS": "number|operators|abs %n(x)",
-   "TRIG": "number|operators|%list(op)[sin,cos,tan,asin,acos,atan] %n(x)",
-   "ROUND": "number|operators|%list(op)[round,floor,ceil] %n(x)",
-   "EULER": "number|operators|%list(op)[e^,ln] %n(x)",
-   "SQRT": "number|operators|sqrt %n(x)",
-   "NOT": "boolean|operators|not %bool(a)",
-   "AND": "boolean|operators|%bool(a) and %bool(b)",
-   "OR": "boolean|operators|%bool(a) or %bool(b)",
-   "XOR": "boolean|operators|%bool(a) xor %bool(b)",
-   "EQUALS": "boolean|operators|%n(a) = %n(b)",
-   "GREATER": "boolean|operators|%n(a) > %n(b)",
-   "LESSER": "boolean|operators|%n(a) < %n(b)",
-   "GREATER_EQ": "boolean|operators|%n(a) ≥ %n(b)",
-   "LESSER_EQ": "boolean|operators|%n(a) ≤ %n(b)"
-}
+func build_block(var block_ID):
 
-const BLOCK_DEFINITIONS_PARSED = {
-		
-}
+	var definition = BLOCK_DEFINITIONS[block_ID]
 
-func buildBlock(var block_ID):
-	
-	var definition = BLOCK_DEFINITIONS_PARSED[block_ID]
-	
+	var new_block = null
+
 	match definition.block_type:
 		BlockTypes.STATEMENT:
-			return buildStatement(definition.components,definition.block_type,definition.category)
+			new_block = build_statement(definition)
 		BlockTypes.HEADER:
-			return buildStatement(definition.components,definition.block_type,definition.category)
+			new_block = build_statement(definition)
 		BlockTypes.END:
-			return buildStatement(definition.components,definition.block_type,definition.category)
-		BlockTypes.HEADER:
-			return null
-		_:
-			return buildData(definition.components,definition.block_type,definition.category)
-	
+			new_block = build_statement(definition)
+		BlockTypes.DATA:
+			new_block = build_data(definition)
 
-func buildData(var components, var block_type, var category):
+	new_block.block_ID = block_ID
+
+	return new_block
+
+
+func build_data(var definition):
+
+	var new_block = DataBlock.instance()
+	new_block.build(definition.data_type)
+
+	new_block.self_modulate = EditorHandler.CATEGORY_COLORS[definition.category]
 	
-	var new_block = null
+	for component in definition.components:
 	
-	match block_type:
-		BlockTypes.NUMBER:
-			new_block = NumberBlock.instance()
-		BlockTypes.COUNTER:
-			new_block = CounterBlock.instance()
-		BlockTypes.GROUP:
-			new_block = GroupBlock.instance()
-		BlockTypes.COLOR:
-			new_block = ColorBlock.instance()
-		BlockTypes.BLOCK:
-			new_block = BlockBlock.instance()
-		BlockTypes.ITEM:
-			new_block = ItemBlock.instance()
-		BlockTypes.STRING:
-			new_block = StringBlock.instance()
-		BlockTypes.BOOLEAN:
-			new_block = BooleanBlock.instance()
-		BlockTypes.OBJECT:
-			new_block = ObjectBlock.instance()
-		BlockTypes.DICT:
-			new_block = DictBlock.instance()
-		BlockTypes.ARRAY:
-			new_block = ArrayBlock.instance()
-			
-	new_block.self_modulate = EditorHandler.CATEGORY_COLORS[category]
-	
-	new_block.data_type = block_type
-	
-	for component in components:
-		
 		if component.type != BlockHandler.Components.OPENING:
-			
 			if component.type != BlockHandler.Components.TEXT:
-				var new_component = new_block.addComponent(component)
+				var new_component = new_block.add_component(component)
 				new_block.component_dict[component.name] = new_component
 				new_component.parent_block = new_block
 			else:
-				new_block.addComponent(component)
-	
+				new_block.add_component(component)
+
 	return new_block
-	
-	
 
 
-func buildStatement(var components, var block_type, var category):
-	
+
+
+func build_statement(var definition):
+
 	var new_block = StatementBlock.instance()
-	
+
 	var new_part = null
-	
-	if block_type == BlockTypes.HEADER:
+
+	if definition.block_type == BlockTypes.HEADER:
 		new_part = BlockHandler.StatementHead.instance()
-		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[category]
+		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[definition.category]
 		new_block.get_node("Parts").add_child(new_part)
 	else:
 		new_part = BlockHandler.StatementTop.instance()
-		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[category]
+		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[definition.category]
 		new_block.get_node("Parts").add_child(new_part)
-	
+
 	var current_middle = null
-	
-	for component in components:
-		
+
+	for component in definition.components:
+
 		if component.type != BlockHandler.Components.OPENING:
 			if current_middle == null:
 				current_middle = BlockHandler.StatementMiddle.instance()
-				current_middle.self_modulate = EditorHandler.CATEGORY_COLORS[category]
+				current_middle.self_modulate = EditorHandler.CATEGORY_COLORS[definition.category]
 				new_block.get_node("Parts").add_child(current_middle)
-				
+
 			if component.type != BlockHandler.Components.TEXT:
-				var new_component = current_middle.addComponent(component)
+				var new_component = current_middle.add_component(component)
 				new_block.component_dict[component.name] = new_component
 				new_component.parent_block = new_block
 			else:
-				current_middle.addComponent(component)
+				current_middle.add_component(component)
 		else:
 			var new_component = BlockHandler.OpeningComponent.instance()
 			new_component.parent_block = new_block
 			new_block.get_node("Parts").add_child(new_component)
 			new_block.component_dict[component.name] = new_component
-			new_component.set_color(EditorHandler.CATEGORY_COLORS[category])
+			new_component.set_color(EditorHandler.CATEGORY_COLORS[definition.category])
 			current_middle = null
-	
-	if block_type == BlockTypes.END:
+
+	if definition.block_type == BlockTypes.END:
 		new_part = BlockHandler.StatementEnd.instance()
-		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[category]
+		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[definition.category]
 		new_block.get_node("Parts").add_child(new_part)
 	else:
 		new_part = BlockHandler.StatementBottom.instance()
-		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[category]
+		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[definition.category]
 		new_block.get_node("Parts").add_child(new_part)
-	
+
 	return new_block
-	
+
 
 
 

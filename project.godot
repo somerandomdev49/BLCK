@@ -19,6 +19,7 @@ config/icon="res://icon.png"
 
 EditorHandler="*res://editor/global/EditorHandler.gd"
 BlockHandler="*res://editor/global/BlockHandler.gd"
+ConversionHandler="*res://editor/global/ConversionHandler.gd"
 
 [debug]
 
