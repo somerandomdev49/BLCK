@@ -25,7 +25,10 @@ func build(var type):
 		if type_info.icon != null:
 			$HBoxContainer/Icon.texture = type_info.icon
 			$HBoxContainer/Icon.show()
-	
+		add_stylebox_override("panel",type_info.block_style)
+	else:
+		add_stylebox_override("panel",BlockHandler.SpecialBlockStyle)
+		
 	$TooltipAnchor/BlockToolTip.set_type(type)
 	data_type = type
 	

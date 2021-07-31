@@ -9,7 +9,7 @@ func build(var types):
 	if types.size() == 0:
 		$Visual/InputContainer/Icon.texture = BlockHandler.AnyIcon
 		$Visual/InputContainer/Icon.show()
-		$Visual.get_stylebox("panel").region_rect.position.y = BlockHandler.UniversalStyleOffset
+		$Visual.add_stylebox_override("panel",BlockHandler.UniversalInputStyle)
 	elif types.size() == 1:
 		var type = types[0]
 		if BlockHandler.SPECIAL_TYPES.has(type):
@@ -17,7 +17,7 @@ func build(var types):
 			if type_info.icon != null:
 				$Visual/InputContainer/Icon.texture = type_info.icon
 				$Visual/InputContainer/Icon.show()
-			$Visual.get_stylebox("panel").region_rect.position.y = type_info.style_offset
+			$Visual.add_stylebox_override("panel",type_info.input_style)
 			
 			match type_info.input:
 				BlockHandler.SpecialInputs.NUMBER:
@@ -29,7 +29,7 @@ func build(var types):
 		else:
 			$Visual/InputContainer/TypeLabel.text = type
 			$Visual/InputContainer/TypeLabel.show()
-			$Visual.get_stylebox("panel").region_rect.position.y = BlockHandler.SpecialStyleOffset
+			$Visual.add_stylebox_override("panel",BlockHandler.SpecialInputStyle)
 	else:
 		var type_text = types[0]
 		
@@ -38,7 +38,7 @@ func build(var types):
 		
 		$Visual/InputContainer/TypeLabel.text = type_text
 		$Visual/InputContainer/TypeLabel.show()
-		$Visual.get_stylebox("panel").region_rect.position.y = BlockHandler.UniversalStyleOffset
+		$Visual.add_stylebox_override("panel",BlockHandler.UniversalInputStyle)
 		
 	data_types = types
 	

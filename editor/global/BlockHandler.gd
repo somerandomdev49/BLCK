@@ -32,11 +32,18 @@ const ItemIcon = preload("res://assets/editor/blocks/icons/item.png")
 const ObjectIcon = preload("res://assets/editor/blocks/icons/object.png")
 
 #InputStyles
-const NumStyleOffset = 0
-const BoolStyleOffset = 72
-const StringStyleOffset = 72*2
-const SpecialStyleOffset = 72*3
-const UniversalStyleOffset = 72*4
+const NumInputStyle = preload("res://assets/editor/blocks/components/inputs/NumInput.tres")
+const BoolInputStyle = preload("res://assets/editor/blocks/components/inputs/BoolInput.tres")
+const StringInputStyle = preload("res://assets/editor/blocks/components/inputs/StringInput.tres")
+const SpecialInputStyle = preload("res://assets/editor/blocks/components/inputs/SpecialInput.tres")
+const UniversalInputStyle = preload("res://assets/editor/blocks/components/inputs/UniversalInput.tres")
+
+#BlockStyles
+const NumBlockStyle = preload("res://assets/editor/blocks/data/NumBlock.tres")
+const BoolBlockStyle = preload("res://assets/editor/blocks/data/BoolBlock.tres")
+const StringBlockStyle = preload("res://assets/editor/blocks/data/StringBlock.tres")
+const SpecialBlockStyle = preload("res://assets/editor/blocks/data/SpecialBlock.tres")
+
 
 enum BlockTypes{
 	STATEMENT,
@@ -63,57 +70,68 @@ const SPECIAL_TYPES = {
 	"@number": {
 		"icon": null,
 		"input": SpecialInputs.NUMBER,
-		"style_offset": NumStyleOffset,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
 	},
 	"@counter": {
 		"icon": CounterIcon,
 		"input": SpecialInputs.NUMBER,
-		"style_offset": NumStyleOffset,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
 	},
 	"@group": {
 		"icon": GroupIcon,
 		"input": SpecialInputs.NUMBER,
-		"style": NumStyleOffset,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
 	},
 	"@color": {
 		"icon": ColorIcon,
 		"input": SpecialInputs.NUMBER,
-		"style_offset": NumStyleOffset,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
 	},
 	"@block": {
 		"icon": BlockIcon,
 		"input": SpecialInputs.NUMBER,
-		"style_offset": NumStyleOffset,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
 	},
 	"@item": {
 		"icon": ItemIcon,
 		"input": SpecialInputs.NUMBER,
-		"style_offset": NumStyleOffset,
+		"input_style": NumInputStyle,
+		"block_style": NumBlockStyle,
 	},
 	"@string": {
 		"icon": null,
 		"input": SpecialInputs.STRING,
-		"style_offset": StringStyleOffset,
+		"input_style": StringInputStyle,
+		"block_style": StringBlockStyle,
 	},
 	"@boolean": {
 		"icon": null,
 		"input": SpecialInputs.BOOLEAN,
-		"style_offset": BoolStyleOffset,
+		"input_style": BoolInputStyle,
+		"block_style": BoolBlockStyle,
 	},
 	"@object": {
 		"icon": ObjectIcon,
 		"input": null,
-		"style_offset": SpecialStyleOffset,
+		"input_style": SpecialInputStyle,
+		"block_style": SpecialBlockStyle,
 	},
 	"@dict": {
 		"icon": DictIcon,
 		"input": null,
-		"style_offset": SpecialStyleOffset,
+		"input_style": SpecialInputStyle,
+		"block_style": SpecialBlockStyle,
 	},
 	"@array": {
 		"icon": ArrayIcon,
 		"input": null,
-		"style_offset": SpecialStyleOffset,
+		"input_style": SpecialInputStyle,
+		"block_style": SpecialBlockStyle,
 	},
 }
 
@@ -144,7 +162,8 @@ func picker(var alpha_allowed, var comp_name):
 	return {"type":  Components.COLOR_PICKER, "alpha": alpha_allowed, "name": comp_name}
 
 var BLOCK_DEFINITIONS = {
-	
+	####Operators
+	#--------------------------------
 	"PLUS": {
 		"block_type": BlockTypes.DATA,
 		"data_type": "@number",
@@ -165,7 +184,7 @@ var BLOCK_DEFINITIONS = {
 			data(["@number"], "b"),
 		]
 	},
-	"MULTIPLY": {
+	"MULT": {
 		"block_type": BlockTypes.DATA,
 		"data_type": "@number",
 		"category": EditorHandler.Categories.OPERATORS,
@@ -174,7 +193,173 @@ var BLOCK_DEFINITIONS = {
 			text("*"),
 			data(["@number"], "b"),
 		]
-	}
+	},
+	"DIV": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("/"),
+			data(["@number"], "b"),
+		]
+	},
+	"MOD": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("%"),
+			data(["@number"], "b"),
+		]
+	},
+	"POW": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("^"),
+			data(["@number"], "b"),
+		]
+	},
+	"ABS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			text("abs"),
+			data(["@number"], "x"),
+		]
+	},
+	"TRIG": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			list(["sin","cos","tan","asin","acos","atan"],"function"),
+			data(["@number"], "x"),
+		]
+	},
+	"ROUND": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			list(["round","floor","ceil"],"function"),
+			data(["@number"], "x"),
+		]
+	},
+	"EULER": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			list(["e^","ln"],"function"),
+			data(["@number"], "x"),
+		]
+	},
+	"SQRT": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			text("sqrt"),
+			data(["@number"], "x"),
+		]
+	},
+
+	"NOT": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			text("not"),
+			data(["@boolean"], "a"),
+		]
+	},
+	"AND": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@boolean"], "a"),
+			text("and"),
+			data(["@boolean"], "b"),
+		]
+	},
+	"OR": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@boolean"], "a"),
+			text("or"),
+			data(["@boolean"], "b"),
+		]
+	},
+	"XOR": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@boolean"], "a"),
+			text("xor"),
+			data(["@boolean"], "b"),
+		]
+	},
+
+	"EQUALS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("="),
+			data(["@number"], "b"),
+		]
+	},
+	"GREATER": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text(">"),
+			data(["@number"], "b"),
+		]
+	},
+	"LESSER": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("<"),
+			data(["@number"], "b"),
+		]
+	},
+	"GREATER_EQ": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("≥"),
+			data(["@number"], "b"),
+		]
+	},
+	"LESSER_EQ": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@boolean",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "a"),
+			text("≤"),
+			data(["@number"], "b"),
+		]
+	},
 	
 }
 
