@@ -15,6 +15,11 @@ func _ready():
 		j += 150
 		$BlockCanvas.add_child(new_block)
 	
+	var output = []
+	OS.execute("spwn",[],true,output)
+	for i in output:
+		print(i)
+	
 	
 
 func _process(_delta):

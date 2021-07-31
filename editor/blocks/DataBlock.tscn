@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://assets/editor/blocks/data/NumBlock.tres" type="StyleBox" id=1]
+[ext_resource path="res://assets/editor/blocks/data/styles/NumBlock.tres" type="StyleBox" id=1]
 [ext_resource path="res://assets/editor/blocks/icons/counter.png" type="Texture" id=2]
 [ext_resource path="res://editor/blocks/DataBlock.gd" type="Script" id=3]
 [ext_resource path="res://editor/blocks/BlockToolTip.tscn" type="PackedScene" id=4]

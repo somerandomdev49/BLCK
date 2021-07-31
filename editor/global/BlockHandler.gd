@@ -32,17 +32,17 @@ const ItemIcon = preload("res://assets/editor/blocks/icons/item.png")
 const ObjectIcon = preload("res://assets/editor/blocks/icons/object.png")
 
 #InputStyles
-const NumInputStyle = preload("res://assets/editor/blocks/components/inputs/NumInput.tres")
-const BoolInputStyle = preload("res://assets/editor/blocks/components/inputs/BoolInput.tres")
-const StringInputStyle = preload("res://assets/editor/blocks/components/inputs/StringInput.tres")
-const SpecialInputStyle = preload("res://assets/editor/blocks/components/inputs/SpecialInput.tres")
-const UniversalInputStyle = preload("res://assets/editor/blocks/components/inputs/UniversalInput.tres")
+const NumInputStyle = preload("res://assets/editor/blocks/components/input_styles/NumInput.tres")
+const BoolInputStyle = preload("res://assets/editor/blocks/components/input_styles/BoolInput.tres")
+const StringInputStyle = preload("res://assets/editor/blocks/components/input_styles/StringInput.tres")
+const SpecialInputStyle = preload("res://assets/editor/blocks/components/input_styles/SpecialInput.tres")
+const UniversalInputStyle = preload("res://assets/editor/blocks/components/input_styles/UniversalInput.tres")
 
 #BlockStyles
-const NumBlockStyle = preload("res://assets/editor/blocks/data/NumBlock.tres")
-const BoolBlockStyle = preload("res://assets/editor/blocks/data/BoolBlock.tres")
-const StringBlockStyle = preload("res://assets/editor/blocks/data/StringBlock.tres")
-const SpecialBlockStyle = preload("res://assets/editor/blocks/data/SpecialBlock.tres")
+const NumBlockStyle = preload("res://assets/editor/blocks/data/styles/NumBlock.tres")
+const BoolBlockStyle = preload("res://assets/editor/blocks/data/styles/BoolBlock.tres")
+const StringBlockStyle = preload("res://assets/editor/blocks/data/styles/StringBlock.tres")
+const SpecialBlockStyle = preload("res://assets/editor/blocks/data/styles/SpecialBlock.tres")
 
 
 enum BlockTypes{

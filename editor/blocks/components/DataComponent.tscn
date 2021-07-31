@@ -4,15 +4,15 @@
 [ext_resource path="res://editor/blocks/components/DataComponent.gd" type="Script" id=2]
 [ext_resource path="res://assets/editor/blocks/components/updown.png" type="Texture" id=3]
 [ext_resource path="res://editor/blocks/components/InputVisual.gd" type="Script" id=4]
-[ext_resource path="res://assets/editor/blocks/components/inputs/NumInput.tres" type="StyleBox" id=5]
+[ext_resource path="res://assets/editor/blocks/components/input_styles/NumInput.tres" type="StyleBox" id=5]
 [ext_resource path="res://assets/editor/blocks/component_font.tres" type="DynamicFont" id=6]
 [ext_resource path="res://assets/editor/blocks/block_font.tres" type="DynamicFont" id=7]
 [ext_resource path="res://assets/editor/blocks/components/switch_true.png" type="Texture" id=8]
 [ext_resource path="res://assets/editor/blocks/components/switch_false.png" type="Texture" id=9]
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="StyleBoxEmpty" id=1]
 
-[sub_resource type="Theme" id=3]
+[sub_resource type="Theme" id=2]
 default_font = ExtResource( 7 )
 LineEdit/colors/clear_button_color = Color( 0.88, 0.88, 0.88, 1 )
 LineEdit/colors/clear_button_color_pressed = Color( 1, 1, 1, 1 )
@@ -24,15 +24,15 @@ LineEdit/colors/selection_color = Color( 0.49, 0.49, 0.49, 1 )
 LineEdit/constants/minimum_spaces = 0
 LineEdit/fonts/font = null
 LineEdit/icons/clear = null
-LineEdit/styles/focus = SubResource( 2 )
-LineEdit/styles/normal = SubResource( 2 )
-LineEdit/styles/read_only = SubResource( 2 )
+LineEdit/styles/focus = SubResource( 1 )
+LineEdit/styles/normal = SubResource( 1 )
+LineEdit/styles/read_only = SubResource( 1 )
+
+[sub_resource type="StyleBoxEmpty" id=3]
 
 [sub_resource type="StyleBoxEmpty" id=4]
 
-[sub_resource type="StyleBoxEmpty" id=5]
-
-[sub_resource type="RectangleShape2D" id=6]
+[sub_resource type="RectangleShape2D" id=5]
 resource_local_to_scene = true
 extents = Vector2( 71, 32 )
 
@@ -88,7 +88,7 @@ margin_right = 136.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 130, 72 )
 size_flags_horizontal = 3
-theme = SubResource( 3 )
+theme = SubResource( 2 )
 custom_icons/updown = ExtResource( 3 )
 max_value = 0.0
 step = 0.0
@@ -105,9 +105,9 @@ margin_left = 1.0
 margin_right = 131.0
 margin_bottom = 72.0
 rect_min_size = Vector2( 130, 72 )
-custom_styles/read_only = SubResource( 4 )
-custom_styles/focus = SubResource( 4 )
-custom_styles/normal = SubResource( 4 )
+custom_styles/read_only = SubResource( 3 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/normal = SubResource( 3 )
 custom_fonts/font = ExtResource( 7 )
 custom_constants/minimum_spaces = 0
 align = 1
@@ -123,12 +123,12 @@ margin_right = 112.0
 margin_bottom = 72.0
 custom_icons/off = ExtResource( 9 )
 custom_icons/on = ExtResource( 8 )
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 5 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/disabled = SubResource( 5 )
-custom_styles/hover_pressed = SubResource( 5 )
-custom_styles/normal = SubResource( 5 )
+custom_styles/hover = SubResource( 4 )
+custom_styles/pressed = SubResource( 4 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/hover_pressed = SubResource( 4 )
+custom_styles/normal = SubResource( 4 )
 custom_constants/check_vadjust = 0
 custom_constants/hseparation = 0
 __meta__ = {
@@ -140,6 +140,6 @@ collision_mask = 0
 
 [node name="Shape" type="CollisionShape2D" parent="Visual/InsertDetect"]
 position = Vector2( 75, 36 )
-shape = SubResource( 6 )
+shape = SubResource( 5 )
 
 [node name="Tween" type="Tween" parent="Visual"]
