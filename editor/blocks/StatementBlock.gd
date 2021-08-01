@@ -82,11 +82,15 @@ func stop_drag():
 func parts_gui_input(event):
 	
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT:
-			if event.pressed:
-				start_drag()
-			else:
-				stop_drag()
+		match event.button_index:
+			BUTTON_LEFT:
+				if event.pressed:
+					start_drag()
+				else:
+					stop_drag()
+			BUTTON_RIGHT:
+				if event.pressed:
+					print( ConversionHandler.convert_block(self, 0) )
 
 func _process(_delta):
 

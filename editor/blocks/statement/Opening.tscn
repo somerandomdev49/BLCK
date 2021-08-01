@@ -10,6 +10,7 @@
 extents = Vector2( 84, 29.25 )
 
 [node name="Opening" type="VBoxContainer" groups=[
+"can_connect",
 "opening",
 ]]
 margin_right = 200.0

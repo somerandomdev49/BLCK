@@ -83,7 +83,7 @@ func _gui_input(event):
 					stop_drag()
 			BUTTON_RIGHT:
 				if event.pressed:
-					print( ConversionHandler.convert_block(self) )
+					print( ConversionHandler.convert_block(self, 0) )
 
 
 func mouse_entered():

@@ -75,7 +75,7 @@ const SPECIAL_TYPES = {
 	},
 	"@counter": {
 		"icon": CounterIcon,
-		"input": SpecialInputs.NUMBER,
+		"input": null,
 		"input_style": NumInputStyle,
 		"block_style": NumBlockStyle,
 	},
@@ -109,7 +109,7 @@ const SPECIAL_TYPES = {
 		"input_style": StringInputStyle,
 		"block_style": StringBlockStyle,
 	},
-	"@boolean": {
+	"@bool": {
 		"icon": null,
 		"input": SpecialInputs.BOOLEAN,
 		"input_style": BoolInputStyle,
@@ -171,7 +171,7 @@ var BLOCK_DEFINITIONS = {
 		"category": EditorHandler.Categories.CONTROL,
 		"components": [
 			text("if"),
-			data(["@boolean"],"condition"),
+			data(["@bool"],"condition"),
 			opening("true"),
 		]
 	},
@@ -181,7 +181,7 @@ var BLOCK_DEFINITIONS = {
 		"category": EditorHandler.Categories.CONTROL,
 		"components": [
 			text("if"),
-			data(["@boolean"],"condition"),
+			data(["@bool"],"condition"),
 			opening("true"),
 			text("else"),
 			opening("false"),
@@ -317,6 +317,7 @@ var BLOCK_DEFINITIONS = {
 			text("follow the player's Y for"),
 			data(["@number"],"time"), text("seconds, delay:"),
 			data(["@number"],"delay"),
+			text("speed:"), data(["@number"],"speed"),
 			text("offset:"), data(["@number"],"offset"),
 			text("max speed:"), data(["@number"],"max_speed"),
 		]
@@ -358,6 +359,7 @@ var BLOCK_DEFINITIONS = {
 		"components": [
 			text("move"), data(["@group"],"group1"),
 			text("to"), data(["@group"],"group2"),
+			list(["on X and Y","on X","on Y"],"coords"),
 		]
 	},
 	"MOVE_TO_DURATION": {
@@ -367,6 +369,7 @@ var BLOCK_DEFINITIONS = {
 		"components": [
 			text("move"), data(["@group"],"group1"),
 			text("to"), data(["@group"],"group2"),
+			list(["on X and Y","on X","on Y"],"coords"),
 			text("over"), data(["@number"],"time"), text("seconds")
 		]
 	},
@@ -377,6 +380,7 @@ var BLOCK_DEFINITIONS = {
 		"components": [
 			text("move"), data(["@group"],"group1"),
 			text("to"), data(["@group"],"group2"),
+			list(["on X and Y","on X","on Y"],"coords"),
 			text("over"), data(["@number"],"time"),
 			text("seconds, easing:"),
 			list([
@@ -410,7 +414,7 @@ var BLOCK_DEFINITIONS = {
 			text("rotate"), data(["@group"],"group1"),
 			data(["@number"],"degrees"), text("degrees around"),
 			data(["@group"],"group2"),
-			text("lock rotation?"), data(["@boolean"],"lock"),
+			text("lock rotation?"), data(["@bool"],"lock"),
 		]
 	},
 	"ROTATE_DURATION": {
@@ -422,7 +426,7 @@ var BLOCK_DEFINITIONS = {
 			data(["@number"],"degrees"), text("degrees around"),
 			data(["@group"],"group2"),
 			text("over"), data(["@number"],"time"),
-			text("seconds, lock rotation?"), data(["@boolean"],"lock"),
+			text("seconds, lock rotation?"), data(["@bool"],"lock"),
 		]
 	},
 	"ROTATE_FULL": {
@@ -456,7 +460,7 @@ var BLOCK_DEFINITIONS = {
 				"Back Out",
 			], "easing"),
 			text("rate:"), data(["@number"],"rate"),
-			text("lock rotation?"), data(["@boolean"],"lock"),
+			text("lock rotation?"), data(["@bool"],"lock"),
 		]
 	},
 	"TOGGLE_OFF": {
@@ -484,7 +488,7 @@ var BLOCK_DEFINITIONS = {
 			text("fade in:"), data(["@number"],"fade_in"),
 			text("hold:"), data(["@number"],"hold"),
 			text("fade out:"), data(["@number"],"fade_out"),
-			text("exclusive?"), data(["@boolean"],"exclusive"),
+			text("exclusive?"), data(["@bool"],"exclusive"),
 		]
 	},
 	"PULSE_GROUP_RGB": {
@@ -499,7 +503,7 @@ var BLOCK_DEFINITIONS = {
 			text("fade in:"), data(["@number"],"fade_in"),
 			text("hold:"), data(["@number"],"hold"),
 			text("fade out:"), data(["@number"],"fade_out"),
-			text("exclusive?"), data(["@boolean"],"exclusive"),
+			text("exclusive?"), data(["@bool"],"exclusive"),
 		]
 	},
 	"PULSE_GROUP_HSV": {
@@ -509,12 +513,12 @@ var BLOCK_DEFINITIONS = {
 		"components": [
 			text("pulse"), data(["@group"],"group"),
 			text("h:"), data(["@number"],"h"),
-			text("s:"), data(["@number"],"s"), data(["@boolean"],"s_checked"),
-			text("v:"), data(["@number"],"v"), data(["@boolean"],"v_checked"),
+			text("s:"), data(["@number"],"s"), data(["@bool"],"s_checked"),
+			text("v:"), data(["@number"],"v"), data(["@bool"],"v_checked"),
 			text("fade in:"), data(["@number"],"fade_in"),
 			text("hold:"), data(["@number"],"hold"),
 			text("fade out:"), data(["@number"],"fade_out"),
-			text("exclusive?"), data(["@boolean"],"exclusive"),
+			text("exclusive?"), data(["@bool"],"exclusive"),
 		]
 	},
 
@@ -530,7 +534,7 @@ var BLOCK_DEFINITIONS = {
 			text("fade in:"), data(["@number"],"fade_in"),
 			text("hold:"), data(["@number"],"hold"),
 			text("fade out:"), data(["@number"],"fade_out"),
-			text("exclusive?"), data(["@boolean"],"exclusive"),
+			text("exclusive?"), data(["@bool"],"exclusive"),
 		]
 	},
 	"PULSE_COLOR_RGB": {
@@ -545,7 +549,7 @@ var BLOCK_DEFINITIONS = {
 			text("fade in:"), data(["@number"],"fade_in"),
 			text("hold:"), data(["@number"],"hold"),
 			text("fade out:"), data(["@number"],"fade_out"),
-			text("exclusive?"), data(["@boolean"],"exclusive"),
+			text("exclusive?"), data(["@bool"],"exclusive"),
 		]
 	},
 	"PULSE_COLOR_HSV": {
@@ -555,12 +559,12 @@ var BLOCK_DEFINITIONS = {
 		"components": [
 			text("pulse"), data(["@color"],"channel"),
 			text("h:"), data(["@number"],"h"),
-			text("s:"), data(["@number"],"s"), data(["@boolean"],"s_checked"),
-			text("v:"), data(["@number"],"v"), data(["@boolean"],"v_checked"),
+			text("s:"), data(["@number"],"s"), data(["@bool"],"s_checked"),
+			text("v:"), data(["@number"],"v"), data(["@bool"],"v_checked"),
 			text("fade in:"), data(["@number"],"fade_in"),
 			text("hold:"), data(["@number"],"hold"),
 			text("fade out:"), data(["@number"],"fade_out"),
-			text("exclusive?"), data(["@boolean"],"exclusive"),
+			text("exclusive?"), data(["@bool"],"exclusive"),
 		]
 	},
 	"SET_COLOR": {
@@ -571,7 +575,7 @@ var BLOCK_DEFINITIONS = {
 			text("set"), data(["@color"],"channel"),
 			text("to"), picker(false,"color"),
 			text("over"), data(["@number"],"time"),
-			text("seconds, blending?"), data(["@boolean"],"blending"),
+			text("seconds, blending?"), data(["@bool"],"blending"),
 		]
 	},
 	"SET_COLOR_RGBA": {
@@ -585,7 +589,7 @@ var BLOCK_DEFINITIONS = {
 			text("b:"), data(["@number"],"b"),
 			text("a:"), data(["@number"],"opacity"),
 			text("over"), data(["@number"],"time"),
-			text("seconds, blending?"), data(["@boolean"],"blending"),
+			text("seconds, blending?"), data(["@bool"],"blending"),
 		]
 	},
 	####Blocks
@@ -648,6 +652,46 @@ var BLOCK_DEFINITIONS = {
 			text("to"), data(["@number"], "value"),
 		]
 	},
+	"COUNTER_PLUS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@counter",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			data(["@counter"], "a"),
+			text("+"),
+			data(["@number","@counter"], "b"),
+		]
+	},
+	"COUNTER_MINUS": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@counter",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			data(["@counter"], "a"),
+			text("-"),
+			data(["@number","@counter"], "b"),
+		]
+	},
+	"COUNTER_MULT": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@counter",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			data(["@counter"], "a"),
+			text("*"),
+			data(["@number","@counter"], "b"),
+		]
+	},
+	"COUNTER_DIV": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@counter",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			data(["@counter"], "a"),
+			text("/"),
+			data(["@number","@counter"], "b"),
+		]
+	},
 
 	####Strings
 	#--------------------------------
@@ -679,7 +723,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"STRING_CONTAINS": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.STRINGS,
 		"components": [
 			data(["@string"], "string1"),
@@ -689,7 +733,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"STRING_STARTS": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.STRINGS,
 		"components": [
 			data(["@string"], "string1"),
@@ -699,7 +743,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"STRING_ENDS": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.STRINGS,
 		"components": [
 			data(["@string"], "string1"),
@@ -720,7 +764,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"STRING_IS_EMPTY": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.STRINGS,
 		"components": [
 			text("is"),
@@ -730,7 +774,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"STRING_IS_LOWERCASE": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.STRINGS,
 		"components": [
 			text("is"),
@@ -740,7 +784,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"STRING_IS_UPPERCASE": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.STRINGS,
 		"components": [
 			text("is"),
@@ -815,7 +859,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"ARRAY_CONTAINS": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.ARRAYS,
 		"components": [
 			data(["@array"], "array"),
@@ -836,7 +880,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"ARRAY_EMPTY": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.ARRAYS,
 		"components": [
 			text("is"),
@@ -972,7 +1016,20 @@ var BLOCK_DEFINITIONS = {
 			text("with step"), data(["@number"],"step"),
 		]
 	},
-
+	
+	####Objects
+	#--------------------------------
+	
+	"OBJECT_ADD": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.OBJECTS,
+		"components": [
+			text("add"),
+			data(["@object"],"object"),
+			text("to level"),
+		]
+	},
 
 	####Operators
 	#--------------------------------
@@ -1084,47 +1141,47 @@ var BLOCK_DEFINITIONS = {
 
 	"NOT": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
 			text("not"),
-			data(["@boolean"], "a"),
+			data(["@bool"], "a"),
 		]
 	},
 	"AND": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
-			data(["@boolean"], "a"),
+			data(["@bool"], "a"),
 			text("and"),
-			data(["@boolean"], "b"),
+			data(["@bool"], "b"),
 		]
 	},
 	"OR": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
-			data(["@boolean"], "a"),
+			data(["@bool"], "a"),
 			text("or"),
-			data(["@boolean"], "b"),
+			data(["@bool"], "b"),
 		]
 	},
 	"XOR": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
-			data(["@boolean"], "a"),
+			data(["@bool"], "a"),
 			text("xor"),
-			data(["@boolean"], "b"),
+			data(["@bool"], "b"),
 		]
 	},
 
 	"EQUALS": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
 			data(["@number"], "a"),
@@ -1134,7 +1191,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"GREATER": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
 			data(["@number"], "a"),
@@ -1144,7 +1201,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"LESSER": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
 			data(["@number"], "a"),
@@ -1154,7 +1211,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"GREATER_EQ": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
 			data(["@number"], "a"),
@@ -1164,7 +1221,7 @@ var BLOCK_DEFINITIONS = {
 	},
 	"LESSER_EQ": {
 		"block_type": BlockTypes.DATA,
-		"data_type": "@boolean",
+		"data_type": "@bool",
 		"category": EditorHandler.Categories.OPERATORS,
 		"components": [
 			data(["@number"], "a"),
@@ -1174,6 +1231,24 @@ var BLOCK_DEFINITIONS = {
 	},
 	
 }
+
+func _ready():
+	
+
+
+	for i in BLOCK_DEFINITIONS:
+		var blocktext = ""
+		blocktext += i + ":"
+		for j in BLOCK_DEFINITIONS[i].components:
+			if j.has("name"):
+				blocktext += " (" + j.name + ")"
+			else:
+				blocktext += " " + j.text.strip_edges()
+		print(blocktext)
+		
+	pass
+
+
 
 
 

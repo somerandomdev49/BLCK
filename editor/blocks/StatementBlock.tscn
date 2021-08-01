@@ -3,7 +3,7 @@
 [ext_resource path="res://editor/blocks/StatementBlock.gd" type="Script" id=4]
 
 [node name="StatementBlock" type="VBoxContainer" groups=[
-"statement_block",
+"statement_like",
 ]]
 mouse_filter = 2
 size_flags_horizontal = 0

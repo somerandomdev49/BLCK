@@ -14,11 +14,7 @@ func _ready():
 		new_block.rect_position = Vector2(0,j)
 		j += 150
 		$BlockCanvas.add_child(new_block)
-	
-	var output = []
-	OS.execute("spwn",[],true,output)
-	for i in output:
-		print(i)
+		
 	
 	
 

@@ -36,7 +36,9 @@ LineEdit/styles/read_only = SubResource( 1 )
 resource_local_to_scene = true
 extents = Vector2( 71, 32 )
 
-[node name="InputComponent" type="MarginContainer"]
+[node name="InputComponent" type="MarginContainer" groups=[
+"can_connect",
+]]
 margin_right = 136.0
 margin_bottom = 72.0
 mouse_filter = 1

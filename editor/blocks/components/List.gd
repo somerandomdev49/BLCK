@@ -2,6 +2,9 @@ extends OptionButton
 
 var parent_block = null
 
+func empty_convert():
+	return text
+
 func add_items(var option_array):
 	
 	for i in option_array:

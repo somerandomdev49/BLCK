@@ -2,6 +2,11 @@ extends ColorPickerButton
 
 var parent_block = null
 
+func empty_convert():
+	return color
+
+
+
 func _toggled(button_pressed):
 	
 	set_process(button_pressed)

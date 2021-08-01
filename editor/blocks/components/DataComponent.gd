@@ -5,6 +5,39 @@ var data_types = -1
 
 var drag_area = null
 
+func empty_convert():
+	if data_types.size() > 0:
+		match data_types[0]:
+			"@number":
+				return str($Visual/InputContainer/NumInput.value)
+			"@counter":
+				return "counter(0)"
+			"@group":
+				return str($Visual/InputContainer/NumInput.value) + "g"
+			"@color":
+				return str($Visual/InputContainer/NumInput.value) + "c"
+			"@block":
+				return str($Visual/InputContainer/NumInput.value) + "b"
+			"@item":
+				return str($Visual/InputContainer/NumInput.value) + "i"
+			"@string":
+				return "\"" + $Visual/InputContainer/StringInput.text + "\""
+			"@bool":
+				return ("true" if $Visual/InputContainer/BoolInput.pressed else "false")
+			"@object":
+				return "obj{}"
+			"@dict":
+				return "{}"
+			"@array":
+				return "[]"
+			_:
+				return "null"
+	else:
+		return "null"
+
+
+
+
 func build(var types):
 	if types.size() == 0:
 		$Visual/InputContainer/Icon.texture = BlockHandler.AnyIcon
@@ -89,7 +122,7 @@ func accept_remove():
 
 func area_entered(area):
 	
-	if parent_block.is_in_group("statement_block"):
+	if parent_block.is_in_group("statement_like"):
 		if area.get_parent().data_type in data_types || data_types == []:
 			highlight(area)
 	elif area != parent_block.insert_area:
