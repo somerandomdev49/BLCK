@@ -5,7 +5,10 @@ func format(var string, var comp):
 	var arr = string.split('`')
 	for i in arr.size():
 		if i % 2 == 1:
-			arr[i] = comp[arr[i]]
+			if arr[i] != "$":
+				arr[i] = comp[arr[i]]
+			else:
+				arr[i] = "`$`"
 	var output = ""
 	for i in arr:
 		output += i
@@ -27,12 +30,11 @@ func convert_component(var input):
 	else:
 		return input.empty_convert()
 
-const INIT_STRING = """
+const INIT_STRING = """//***This SPWN script was generated using BLCK***
 
 xor = (a: @bool, b: @bool) {
 	return (a || b) && !(a && b)
 }
-
 """
 
 func convert_block(var block, var tabbed = false):
@@ -43,9 +45,11 @@ func convert_block(var block, var tabbed = false):
 	for i in block.component_dict:
 		comp[i] = convert_component( block.component_dict[i] )
 	
-	var result = ""
+	var result = null
 	
 	match block_ID:
+		"START":
+			result = format("", comp )
 		"IF":
 			result = format("if (`condition`) {\n`true`\n}", comp )
 		"IF_ELSE":
@@ -143,6 +147,10 @@ func convert_block(var block, var tabbed = false):
 			result = format("`channel`.set(`r`,`g`,`b`,opacity=`opacity`,duration=`time`,blending=`blending`)", comp )
 		"TRACKER_COUNTER":
 			result = format("counter(`block1`.create_tracker_item(`block2`))", comp )
+		"COUNTER_FROM_NUM":
+			result = format("counter(`value`)", comp )
+		"COUNTER_FROM_BOOL":
+			result = format("counter(`value`)", comp )
 		"COUNTER_ADD":
 			result = format("`counter` += `value`", comp )
 		"COUNTER_SUBTRACT":
@@ -151,6 +159,8 @@ func convert_block(var block, var tabbed = false):
 			result = format("`counter` *= `value`", comp )
 		"COUNTER_DIVIDE":
 			result = format("`counter` /= `value`", comp )
+		"COUNTER_ASSIGN":
+			result = format("`counter` = `value`", comp )
 		"COUNTER_PLUS":
 			result = format("(`a` + `b`)", comp )
 		"COUNTER_MINUS":
@@ -159,21 +169,23 @@ func convert_block(var block, var tabbed = false):
 			result = format("(`a` * `b`)", comp )
 		"COUNTER_DIV":
 			result = format("(`a` / `b`)", comp )
+		"TO_CONST":
+			result = format("`counter`.to_const(`array`)", comp )
 		#"STRING_JOIN":
 		"STRING_CHAR":
-			result = format("`string`[`i`]", comp )
+			result = format("\"`string`\"[`i`]", comp )
 		"STRING_LENGTH":
-			result = format("`string`.length", comp )
+			result = format("\"`string`\".length", comp )
 		"STRING_CONTAINS":
-			result = format("`string1`.contains(`string2`)", comp )
+			result = format("\"`string1`\".contains(\"`string2`\")", comp )
 		"STRING_STARTS":
-			result = format("`string1`.starts_with(`string2`)", comp )
+			result = format("\"`string1`\".starts_with(\"`string2`\")", comp )
 		"STRING_ENDS":
-			result = format("`string1`.ends_with(`string2`)", comp )
+			result = format("\"`string1`\".ends_with(\"`string2`\")", comp )
 		"STRING_INDEX":
-			result = format("`string1`.index(`string2`)", comp )
+			result = format("\"`string1`\".index(\"`string2`\")", comp )
 		"STRING_IS_EMPTY":
-			result = format("`string1`.is_empty()", comp )
+			result = format("\"`string`\".is_empty()", comp )
 #		"STRING_IS_LOWERCASE":
 #			result = format("`string1`.is_lower()", comp )
 #		"STRING_IS_UPPERCASE":
@@ -222,7 +234,9 @@ func convert_block(var block, var tabbed = false):
 				"item":
 					result = format("`start`i..`end`i", comp )
 		
-		
+		"OBJECT_ADD":
+			result = format("$.add(`object`)", comp )
+			
 		"PLUS":
 			result = format("(`a` + `b`)", comp )
 		"MINUS":
@@ -285,15 +299,41 @@ func convert_block(var block, var tabbed = false):
 			result = format("( `a` >= `b` )", comp )
 		"LESSER_EQ":
 			result = format("( `a` <= `b` )", comp )
-
+		"NUM_DATA":
+			result = format("`x`", comp )
+			
+		"CREATE_VAR":
+			result = format("`name` = `value`", comp )
+		"CREATE_VAR_MUT":
+			result = format("let `name` = `value`", comp )
+		"GET_VAR":
+			result = format("`name`", comp )
+	
+	if result == null:
+		return result
+	
 	if block.is_in_group("statement_like"):
 		var connected_block = block.get_connected_block()
 		if connected_block != null:
-			result += "\n" + convert_block(connected_block,false)
+			if "`$`" in result:
+				result = result.replace("`$`",convert_block(connected_block,true)) + "\n"
+			else:
+				result += "\n" + convert_block(connected_block,false)
+		else:
+			result = result.replace("`$`","")
 		if tabbed:
 			result = "\t" + result.replace("\n","\n\t")
 		return result
 	else:
 		return result
+	
+func _ready():
+	
+	for i in BlockHandler.BLOCK_DEFINITIONS:
+		var gaga = BlockHandler.build_block(i)
+		if convert_block(gaga) == null:
+			print(i + " -> ?")
+	
+	
 	
 	

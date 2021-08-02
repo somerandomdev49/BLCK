@@ -21,7 +21,7 @@ func empty_convert():
 			"@item":
 				return str($Visual/InputContainer/NumInput.value) + "i"
 			"@string":
-				return "\"" + $Visual/InputContainer/StringInput.text + "\""
+				return $Visual/InputContainer/StringInput.text
 			"@bool":
 				return ("true" if $Visual/InputContainer/BoolInput.pressed else "false")
 			"@object":
@@ -32,6 +32,9 @@ func empty_convert():
 				return "[]"
 			_:
 				return "null"
+			"@object_key":
+				return $Visual/InputContainer/StringInput.text
+			
 	else:
 		return "null"
 
@@ -123,10 +126,10 @@ func accept_remove():
 func area_entered(area):
 	
 	if parent_block.is_in_group("statement_like"):
-		if area.get_parent().data_type in data_types || data_types == []:
+		if area.get_parent().data_type in data_types || data_types == [] || area.get_parent().data_type == "":
 			highlight(area)
 	elif area != parent_block.insert_area:
-		if area.get_parent().data_type in data_types || data_types == []:
+		if area.get_parent().data_type in data_types || data_types == [] || area.get_parent().data_type == "":
 			highlight(area)
 
 func area_exited(area):

@@ -91,7 +91,16 @@ func parts_gui_input(event):
 			BUTTON_RIGHT:
 				if event.pressed:
 					print( ConversionHandler.convert_block(self, 0) )
-
+			BUTTON_MIDDLE:
+				if event.pressed:
+					if parent != null:
+						if parent.is_in_group("opening"):
+							remove_from_opening()
+						else:
+							remove_from_bottom()
+						connect_area.monitorable = true
+					queue_free()
+			
 func _process(_delta):
 
 	if dragging:

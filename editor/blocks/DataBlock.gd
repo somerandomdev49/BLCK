@@ -6,7 +6,7 @@ var dragging = false
 var drag_offset = Vector2(0,0)
 var drag_pos = Vector2(0,0)
 
-var data_type = -1
+var data_type = ""
 
 onready var insert_area = $InsertArea
 onready var tooltip = $TooltipAnchor/BlockToolTip
@@ -27,8 +27,10 @@ func build(var type):
 			$HBoxContainer/Icon.show()
 		add_stylebox_override("panel",type_info.block_style)
 	else:
-		add_stylebox_override("panel",BlockHandler.SpecialBlockStyle)
-		
+		if type != "":
+			add_stylebox_override("panel",BlockHandler.SpecialBlockStyle)
+		else:
+			add_stylebox_override("panel",BlockHandler.UniversalBlockStyle)
 	$TooltipAnchor/BlockToolTip.set_type(type)
 	data_type = type
 	
@@ -84,7 +86,12 @@ func _gui_input(event):
 			BUTTON_RIGHT:
 				if event.pressed:
 					print( ConversionHandler.convert_block(self, 0) )
-
+			BUTTON_MIDDLE:
+				if event.pressed:
+					if parent_input != null:
+						remove_from_input()
+						$InsertArea.monitorable = true
+					queue_free()
 
 func mouse_entered():
 	$HoverTimer.start()

@@ -11,6 +11,8 @@ enum Categories{
 	ARRAYS,
 	OBJECTS,
 	CONTROL,
+	EVENTS,
+	VARIABLES,
 }
 
 const CATEGORY_COLORS = {
@@ -23,18 +25,22 @@ const CATEGORY_COLORS = {
 	Categories.ARRAYS: Color("7250D1"),
 	Categories.OBJECTS: Color("9C4444"),
 	Categories.CONTROL: Color("EAA656"),
+	Categories.EVENTS: Color("B76D38"),
+	Categories.VARIABLES: Color("FF8038"),
 }
 
 const CATEGORY_NAMES = {
-	"operators": Categories.OPERATORS,
-	"groups": Categories.GROUPS,
-	"counters": Categories.COUNTERS,
-	"colors": Categories.COLORS,
-	"blocks": Categories.BLOCKS,
-	"strings": Categories.STRINGS,
-	"arrays": Categories.ARRAYS,
-	"objects": Categories.OBJECTS,
-	"control": Categories.CONTROL,
+	Categories.OPERATORS: "Operators",
+	Categories.GROUPS: "Groups",
+	Categories.COUNTERS: "Counters",
+	Categories.COLORS: "Colors",
+	Categories.BLOCKS: "Block",
+	Categories.STRINGS: "Strings",
+	Categories.ARRAYS: "Arrays",
+	Categories.OBJECTS: "Objects",
+	Categories.CONTROL: "Control",
+	Categories.EVENTS: "Events",
+	Categories.VARIABLES: "Variables",
 }
 
 

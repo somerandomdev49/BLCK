@@ -43,6 +43,7 @@ const NumBlockStyle = preload("res://assets/editor/blocks/data/styles/NumBlock.t
 const BoolBlockStyle = preload("res://assets/editor/blocks/data/styles/BoolBlock.tres")
 const StringBlockStyle = preload("res://assets/editor/blocks/data/styles/StringBlock.tres")
 const SpecialBlockStyle = preload("res://assets/editor/blocks/data/styles/SpecialBlock.tres")
+const UniversalBlockStyle = preload("res://assets/editor/blocks/data/styles/UniversalBlock.tres")
 
 
 enum BlockTypes{
@@ -133,6 +134,12 @@ const SPECIAL_TYPES = {
 		"input_style": SpecialInputStyle,
 		"block_style": SpecialBlockStyle,
 	},
+	"@object_key": {
+		"icon": null,
+		"input": SpecialInputs.STRING,
+		"input_style": SpecialInputStyle,
+		"block_style": SpecialBlockStyle,
+	},
 }
 
 const ICON_TYPES = [
@@ -163,6 +170,18 @@ func picker(var alpha_allowed, var comp_name):
 
 var BLOCK_DEFINITIONS = {
 
+	####Events
+	#--------------------------------
+	
+	"START": {
+		"block_type": BlockTypes.HEADER,
+		"data_type": "",
+		"category": EditorHandler.Categories.EVENTS,
+		"components": [
+			text("on program start"),
+		]
+	},
+	
 	####Control
 	#--------------------------------
 	"IF": {
@@ -607,6 +626,24 @@ var BLOCK_DEFINITIONS = {
 	
 	####Counters
 	#--------------------------------
+	"COUNTER_FROM_NUM": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@counter",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			text("counter from"),
+			data(["@number"], "value"),
+		]
+	},
+	"COUNTER_FROM_BOOL": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@counter",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			text("counter from"),
+			data(["@boolean"], "value"),
+		]
+	},
 	"COUNTER_ADD": {
 		"block_type": BlockTypes.STATEMENT,
 		"data_type": "",
@@ -690,6 +727,16 @@ var BLOCK_DEFINITIONS = {
 			data(["@counter"], "a"),
 			text("/"),
 			data(["@number","@counter"], "b"),
+		]
+	},
+	"TO_CONST": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.COUNTERS,
+		"components": [
+			data(["@counter"], "counter"),
+			text("to constant in"),
+			data(["@array"], "array"),
 		]
 	},
 
@@ -1030,6 +1077,16 @@ var BLOCK_DEFINITIONS = {
 			text("to level"),
 		]
 	},
+	"OBJECT_SET": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.OBJECTS,
+		"components": [
+			text("set key"), data(["@object_key"],"key"),
+			text("of"), data(["@object"],"object"),
+			text("to"), data([],"value"),
+		]
+	},
 
 	####Operators
 	#--------------------------------
@@ -1229,24 +1286,50 @@ var BLOCK_DEFINITIONS = {
 			data(["@number"], "b"),
 		]
 	},
+	"NUM_DATA": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@number",
+		"category": EditorHandler.Categories.OPERATORS,
+		"components": [
+			data(["@number"], "x"),
+		]
+	},
+	
+	####Variables
+	#--------------------------------
+	"CREATE_VAR": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.VARIABLES,
+		"components": [
+			text("create var"),
+			data(["@string"], "name"),
+			text("="),
+			data([], "value"),
+		]
+	},
+	"CREATE_VAR_MUT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.VARIABLES,
+		"components": [
+			text("create mutable var"),
+			data(["@string"], "name"),
+			text("="),
+			data([], "value"),
+		]
+	},
+	"GET_VAR": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "",
+		"category": EditorHandler.Categories.VARIABLES,
+		"components": [
+			text("var"),
+			data(["@string"], "name"),
+		]
+	},
 	
 }
-
-func _ready():
-	
-
-
-	for i in BLOCK_DEFINITIONS:
-		var blocktext = ""
-		blocktext += i + ":"
-		for j in BLOCK_DEFINITIONS[i].components:
-			if j.has("name"):
-				blocktext += " (" + j.name + ")"
-			else:
-				blocktext += " " + j.text.strip_edges()
-		print(blocktext)
-		
-	pass
 
 
 
@@ -1302,6 +1385,7 @@ func build_statement(var definition):
 	var new_part = null
 
 	if definition.block_type == BlockTypes.HEADER:
+		new_block.add_to_group("header_block")
 		new_part = BlockHandler.StatementHead.instance()
 		new_part.self_modulate = EditorHandler.CATEGORY_COLORS[definition.category]
 		new_block.get_node("Parts").add_child(new_part)
