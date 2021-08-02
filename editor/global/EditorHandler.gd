@@ -13,6 +13,7 @@ enum Categories{
 	CONTROL,
 	EVENTS,
 	VARIABLES,
+	DEBUG,
 }
 
 const CATEGORY_COLORS = {
@@ -27,6 +28,7 @@ const CATEGORY_COLORS = {
 	Categories.CONTROL: Color("EAA656"),
 	Categories.EVENTS: Color("B76D38"),
 	Categories.VARIABLES: Color("FF8038"),
+	Categories.DEBUG: Color("444444"),
 }
 
 const CATEGORY_NAMES = {
@@ -41,6 +43,7 @@ const CATEGORY_NAMES = {
 	Categories.CONTROL: "Control",
 	Categories.EVENTS: "Events",
 	Categories.VARIABLES: "Variables",
+	Categories.DEBUG: "Debug",
 }
 
 

@@ -21,7 +21,7 @@ func empty_convert():
 			"@item":
 				return str($Visual/InputContainer/NumInput.value) + "i"
 			"@string":
-				return $Visual/InputContainer/StringInput.text
+				return "\"" + $Visual/InputContainer/StringInput.text + "\""
 			"@bool":
 				return ("true" if $Visual/InputContainer/BoolInput.pressed else "false")
 			"@object":

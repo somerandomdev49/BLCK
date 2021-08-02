@@ -173,24 +173,26 @@ func convert_block(var block, var tabbed = false):
 			result = format("`counter`.to_const(`array`)", comp )
 		#"STRING_JOIN":
 		"STRING_CHAR":
-			result = format("\"`string`\"[`i`]", comp )
+			result = format("`string`[`i`]", comp )
 		"STRING_LENGTH":
-			result = format("\"`string`\".length", comp )
+			result = format("`string`.length", comp )
 		"STRING_CONTAINS":
-			result = format("\"`string1`\".contains(\"`string2`\")", comp )
+			result = format("`string1`.contains(`string2`)", comp )
 		"STRING_STARTS":
-			result = format("\"`string1`\".starts_with(\"`string2`\")", comp )
+			result = format("`string1`.starts_with(`string2`)", comp )
 		"STRING_ENDS":
-			result = format("\"`string1`\".ends_with(\"`string2`\")", comp )
+			result = format("`string1`.ends_with(`string2`)", comp )
 		"STRING_INDEX":
-			result = format("\"`string1`\".index(\"`string2`\")", comp )
+			result = format("`string1`.index(`string2`)", comp )
 		"STRING_IS_EMPTY":
-			result = format("\"`string`\".is_empty()", comp )
+			result = format("`string`.is_empty()", comp )
 #		"STRING_IS_LOWERCASE":
 #			result = format("`string1`.is_lower()", comp )
 #		"STRING_IS_UPPERCASE":
 #			result = format("`string1`.is_uppercase()", comp )
 #
+		"STRING_DATA":
+			result = format("`value`", comp )
 		"CLEAR_ARRAY":
 			result = format("`array`.clear()", comp )
 		"ARRAY_CONTAINS":

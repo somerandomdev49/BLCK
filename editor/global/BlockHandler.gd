@@ -893,6 +893,14 @@ var BLOCK_DEFINITIONS = {
 			text("to"), data(["@number"], "b"),
 		]
 	},
+	"STRING_DATA": {
+		"block_type": BlockTypes.DATA,
+		"data_type": "@string",
+		"category": EditorHandler.Categories.STRINGS,
+		"components": [
+			data(["@string"], "string"),
+		]
+	},
 
 	####Arrays
 	#--------------------------------
@@ -1326,6 +1334,18 @@ var BLOCK_DEFINITIONS = {
 		"components": [
 			text("var"),
 			data(["@string"], "name"),
+		]
+	},
+	
+	
+	####Debug
+	#--------------------------------
+	"PRINT": {
+		"block_type": BlockTypes.STATEMENT,
+		"data_type": "",
+		"category": EditorHandler.Categories.DEBUG,
+		"components": [
+			text("print"), data([], "value"),
 		]
 	},
 	
